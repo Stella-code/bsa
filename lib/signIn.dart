@@ -1,5 +1,6 @@
 import 'package:bsa/home.dart';
 import 'package:bsa/reset.dart';
+import 'package:bsa/home.dart';
 import 'package:bsa/verify.dart';
 import 'package:flutter/material.dart';
 import 'package:bsa/components/background.dart';
@@ -14,7 +15,8 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  String _email, _password;
+  String _email;
+  String _password;
   final auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class _SignInState extends State<SignIn> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 40),
+              SizedBox(height: 30.0),
               Padding(
                 //welcome back text code below
                 padding: const EdgeInsets.only(left: 30),
@@ -42,17 +44,17 @@ class _SignInState extends State<SignIn> {
                 ),
               ),
               //2 form fields code below
-              SizedBox(height: 40),
+              SizedBox(height: 40.0),
               CustomInputField(
                 label: 'Email',
                 hint: "Enter your Email",
-                size: size,
-                prefixIcon: Icons.email_outlined,
                 onChanged: (value) {
                   setState(() {
                     _email = value.trim();
                   });
                 },
+                size: size,
+                prefixIcon: Icons.email_outlined,
               ),
               CustomInputField(
                 label: 'Password',
@@ -67,7 +69,7 @@ class _SignInState extends State<SignIn> {
                 },
               ),
               //forgot password code below
-              SizedBox(height: 10),
+              SizedBox(height: 5.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -93,8 +95,9 @@ class _SignInState extends State<SignIn> {
               //     ),
               //   ),
               //),
+
               //code for or login with below here
-              SizedBox(height: 15),
+              SizedBox(height: 5.0),
               Center(
                 child: Text(
                   "OR continue with",
@@ -102,20 +105,20 @@ class _SignInState extends State<SignIn> {
                 ),
               ),
               //code for google button
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 10),
               Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(60),
                   child: FlatButton(
-                      minWidth: 150,
+                      minWidth: 120,
                       onPressed: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => HomeScreen()));
                         //code to sign in with google
                       },
                       padding: EdgeInsets.all(20),
                       color: Colors.blue,
-                      child: Text('Google')),
+                      child: Text('jump to maps')),
                 ),
               ),
               //sign in and the circular forward arrow button code below
@@ -132,9 +135,9 @@ class _SignInState extends State<SignIn> {
                     ),
                   ),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(70),
+                    borderRadius: BorderRadius.circular(50),
                     child: FlatButton(
-                      onPressed: () => _signin(_email, _password),
+                      onPressed: () => _signIn(_email, _password),
                       padding: EdgeInsets.all(20),
                       color: Color(0xFF0b132b),
                       child: Icon(
@@ -174,7 +177,7 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-  _signin(String _email, String _password) async {
+  _signIn(String _email, String _password) async {
     try {
       await auth.signInWithEmailAndPassword(email: _email, password: _password);
 

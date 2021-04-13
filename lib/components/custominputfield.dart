@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 class CustomInputField extends StatelessWidget {
   const CustomInputField({
     Key key,
-    this.onChanged,
     this.label = "Enter Text",
     this.hint = "Enter Text",
     this.obscure = false,
     this.prefixIcon,
     this.size,
+    Function(dynamic) onChanged,
   }) : super(key: key);
 
-  final onChanged;
   final String label;
   final String hint;
   final bool obscure;

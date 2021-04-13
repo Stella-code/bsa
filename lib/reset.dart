@@ -1,5 +1,6 @@
 import 'package:bsa/home.dart';
 import 'package:bsa/verify.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bsa/components/background.dart';
 import 'package:bsa/components/custominputfield.dart';
@@ -26,6 +27,14 @@ class _ResetScreenState extends State<ResetScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              GestureDetector(
+                onTap: () => Navigator.pop(context),
+                child: Icon(
+                  CupertinoIcons.back,
+                  size: 35,
+                  color: Colors.white,
+                ),
+              ),
               SizedBox(height: 40),
               Padding(
                 //welcome back text code below
