@@ -2,7 +2,6 @@ import 'package:bsa/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bsa/components/Background.dart';
-import 'package:bsa/components/custominputfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -41,7 +40,7 @@ class _SignUpState extends State<SignUp> {
               //   size: 35,
               //   color: Colors.white,
               // ),
-              SizedBox(height: 40),
+              SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.only(left: 30),
                 //create acc text
@@ -55,30 +54,110 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               SizedBox(height: 30),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                width: size.width,
+                child: Column(
+                  children: <Widget>[
+                    TextField(
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      obscureText: false,
+                      onChanged: (value) {
+                        setState(() {
+                          _email = value.trim();
+                        });
+                      },
+                      decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.email_outlined,
+                            color: Colors.white,
+                          ),
+                          hintText: "Enter your Email",
+                          labelText: 'Email',
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          fillColor: Colors.blue,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.blue, width: 3.0),
+                          ),
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.blue, width: 2.5),
+                              borderRadius: BorderRadius.circular(5.0))),
+                    ),
+                    Divider(
+                      color: Colors.white,
+                      thickness: 1.5,
+                    ),
+                    SizedBox(height: 40.0),
+                    TextField(
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      obscureText: true,
+                      onChanged: (value) {
+                        setState(() {
+                          _password = value.trim();
+                        });
+                      },
+                      decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.email_outlined,
+                            color: Colors.white,
+                          ),
+                          hintText: "Enter your password",
+                          labelText: 'Password',
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          fillColor: Colors.blue,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.blue, width: 3.0),
+                          ),
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.blue, width: 2.5),
+                              borderRadius: BorderRadius.circular(5.0))),
+                    ),
+                    Divider(
+                      color: Colors.white,
+                      thickness: 1.5,
+                    ),
+                  ],
+                ),
+              ),
               //form fields code below (2 fields)
-              CustomInputField(
-                label: 'E-mail',
-                hint: "Enter your e-mail",
-                size: size,
-                prefixIcon: Icons.email_sharp,
-                onChanged: (value) {
-                  setState(() {
-                    _email = value.trim();
-                  });
-                },
-              ),
-              CustomInputField(
-                label: 'Password',
-                hint: "Enter your Password",
-                size: size,
-                prefixIcon: Icons.lock,
-                obscure: true,
-                onChanged: (value) {
-                  setState(() {
-                    _password = value.trim();
-                  });
-                },
-              ),
+              // CustomInputField(
+              //   label: 'E-mail',
+              //   hint: "Enter your e-mail",
+              //   size: size,
+              //   prefixIcon: Icons.email_sharp,
+              //   onChanged: (value) {
+              //     setState(() {
+              //       _email = value.trim();
+              //     });
+              //   },
+              // ),
+              // CustomInputField(
+              //   label: 'Password',
+              //   hint: "Enter your Password",
+              //   size: size,
+              //   prefixIcon: Icons.lock,
+              //   obscure: true,
+              //   onChanged: (value) {
+              //     setState(() {
+              //       _password = value.trim();
+              //     });
+              //   },
+              // ),
               //signup with google code below
               SizedBox(height: 15),
               Center(
@@ -162,7 +241,7 @@ class _SignUpState extends State<SignUp> {
 
       //success
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomeScreen()));
+          MaterialPageRoute(builder: (context) => MapScreen()));
     } on FirebaseAuthException catch (error) {
       Fluttertoast.showToast(msg: error.message, gravity: ToastGravity.TOP);
       // print(error.message);

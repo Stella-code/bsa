@@ -1,10 +1,11 @@
 import 'package:bsa/home.dart';
+import 'package:bsa/menu_frame.dart';
+import 'package:bsa/menu_screen.dart';
 import 'package:bsa/reset.dart';
 import 'package:bsa/home.dart';
 import 'package:bsa/verify.dart';
 import 'package:flutter/material.dart';
 import 'package:bsa/components/background.dart';
-import 'package:bsa/components/custominputfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bsa/signUp.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -45,29 +46,109 @@ class _SignInState extends State<SignIn> {
               ),
               //2 form fields code below
               SizedBox(height: 40.0),
-              CustomInputField(
-                label: 'Email',
-                hint: "Enter your Email",
-                onChanged: (value) {
-                  setState(() {
-                    _email = value.trim();
-                  });
-                },
-                size: size,
-                prefixIcon: Icons.email_outlined,
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                width: size.width,
+                child: Column(
+                  children: <Widget>[
+                    TextField(
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      obscureText: false,
+                      onChanged: (value) {
+                        setState(() {
+                          _email = value.trim();
+                        });
+                      },
+                      decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.email_outlined,
+                            color: Colors.white,
+                          ),
+                          hintText: "Enter your Email",
+                          labelText: 'Email',
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          fillColor: Colors.blue,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.blue, width: 3.0),
+                          ),
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.blue, width: 2.5),
+                              borderRadius: BorderRadius.circular(5.0))),
+                    ),
+                    Divider(
+                      color: Colors.white,
+                      thickness: 1.5,
+                    ),
+                    SizedBox(height: 20.0),
+                    TextField(
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      obscureText: true,
+                      onChanged: (value) {
+                        setState(() {
+                          _password = value.trim();
+                        });
+                      },
+                      decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.lock,
+                            color: Colors.white,
+                          ),
+                          hintText: "Enter your password",
+                          labelText: 'Password',
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          fillColor: Colors.blue,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.blue, width: 3.0),
+                          ),
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.blue, width: 2.5),
+                              borderRadius: BorderRadius.circular(5.0))),
+                    ),
+                    Divider(
+                      color: Colors.white,
+                      thickness: 1.5,
+                    ),
+                  ],
+                ),
               ),
-              CustomInputField(
-                label: 'Password',
-                hint: "Enter your Password",
-                size: size,
-                prefixIcon: Icons.lock,
-                obscure: true,
-                onChanged: (value) {
-                  setState(() {
-                    _password = value.trim();
-                  });
-                },
-              ),
+              // CustomInputField(
+              //   label: 'Email',
+              //   hint: "Enter your Email",
+              //   onChanged: (value) {
+              //     setState(() {
+              //       _email = value.trim();
+              //     });
+              //   },
+              //   size: size,
+              //   prefixIcon: Icons.email_outlined,
+              // ),
+              // CustomInputField(
+              //   label: 'Password',
+              //   hint: "Enter your Password",
+              //   size: size,
+              //   prefixIcon: Icons.lock,
+              //   obscure: true,
+              //   onChanged: (value) {
+              //     setState(() {
+              //       _password = value.trim();
+              //     });
+              //   },
+              // ),
               //forgot password code below
               SizedBox(height: 5.0),
               Row(
@@ -96,7 +177,7 @@ class _SignInState extends State<SignIn> {
               //   ),
               //),
 
-              //code for or login with below here
+              //code for or login with google below here
               SizedBox(height: 5.0),
               Center(
                 child: Text(
@@ -113,12 +194,12 @@ class _SignInState extends State<SignIn> {
                       minWidth: 120,
                       onPressed: () {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => HomeScreen()));
+                            builder: (context) => MenuFrame()));
                         //code to sign in with google
                       },
                       padding: EdgeInsets.all(20),
                       color: Colors.blue,
-                      child: Text('jump to maps')),
+                      child: Text('jump to menu frame')),
                 ),
               ),
               //sign in and the circular forward arrow button code below
@@ -183,7 +264,7 @@ class _SignInState extends State<SignIn> {
 
       //success
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomeScreen()));
+          MaterialPageRoute(builder: (context) => MapScreen()));
     } on FirebaseAuthException catch (error) {
       Fluttertoast.showToast(msg: error.message, gravity: ToastGravity.TOP);
       // print(error.message);

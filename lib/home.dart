@@ -2,24 +2,17 @@ import 'package:bsa/directions_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:bsa/signIn.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+// import 'package:bsa/signIn.dart';
+// import 'package:dio/dio.dart';
+// import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'directions_model.dart';
 
-class HomeScreen extends StatelessWidget {
-  final auth = FirebaseAuth.instance;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: MapScreen(),
-    );
-  }
-}
-
 class MapScreen extends StatefulWidget {
+  final auth = FirebaseAuth.instance;
+  final Function menuCallback;
+
+  MapScreen({@required this.menuCallback});
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -52,7 +45,7 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: const Text('Google Maps'),
+        title: const Text('Black Spot Alert'),
         actions: [
           if (_origin != null)
             TextButton(
@@ -60,8 +53,8 @@ class _MapScreenState extends State<MapScreen> {
                 CameraUpdate.newCameraPosition(
                   CameraPosition(
                     target: _origin.position,
-                    zoom: 14.5,
-                    tilt: 50.0,
+                    zoom: 15.5,
+                    tilt: 55.0,
                   ),
                 ),
               ),
@@ -77,8 +70,8 @@ class _MapScreenState extends State<MapScreen> {
                 CameraUpdate.newCameraPosition(
                   CameraPosition(
                     target: _destination.position,
-                    zoom: 14.5,
-                    tilt: 50.0,
+                    zoom: 15.5,
+                    tilt: 55.0,
                   ),
                 ),
               ),
@@ -92,7 +85,7 @@ class _MapScreenState extends State<MapScreen> {
       ),
       body: Stack(
         alignment: Alignment.center,
-        children: [
+        children: <Widget>[
           GoogleMap(
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
@@ -115,6 +108,40 @@ class _MapScreenState extends State<MapScreen> {
             },
             onLongPress: _addMarker,
           ),
+          //side menu button code below
+          Positioned(
+            top: 12.0,
+            left: 12.0,
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 50.0,
+                  height: 50.0,
+                  child: Positioned(
+                    child: InkWell(
+                      child: Icon(
+                        Icons.menu_sharp,
+                        color: Colors.black87,
+                        size: 31.0,
+                      ),
+                      onTap: widget.menuCallback,
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        offset: Offset(0, 2),
+                        blurRadius: 6.0,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
           if (_info != null)
             Positioned(
               top: 20.0,
@@ -124,7 +151,7 @@ class _MapScreenState extends State<MapScreen> {
                   horizontal: 12.0,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.yellowAccent,
+                  color: Colors.blueAccent,
                   borderRadius: BorderRadius.circular(20.0),
                   boxShadow: const [
                     BoxShadow(
@@ -153,7 +180,7 @@ class _MapScreenState extends State<MapScreen> {
               ? CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
               : CameraUpdate.newCameraPosition(_initialCameraPosition),
         ),
-        child: const Icon(Icons.center_focus_strong),
+        child: const Icon(Icons.location_searching_sharp),
       ),
     );
   }

@@ -53,7 +53,7 @@ class CustomInputField extends StatelessWidget {
           Divider(
             color: Colors.white,
             thickness: 1.5,
-          )
+          ),
         ],
       ),
     );
