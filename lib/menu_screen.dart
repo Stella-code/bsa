@@ -1,3 +1,4 @@
+import 'package:bsa/profile.dart';
 import 'package:bsa/signIn.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +7,10 @@ Color mainColor = Color.fromRGBO(48, 96, 96, 1.0);
 Color startingColor = Color.fromRGBO(70, 112, 112, 1.0);
 
 class MenuScreen extends StatefulWidget {
+  final Function(int) menuCallback;
+
+  MenuScreen({this.menuCallback});
+
   @override
   _MenuScreenState createState() => _MenuScreenState();
 }
@@ -25,15 +30,15 @@ class _MenuScreenState extends State<MenuScreen> {
     List<String> menuItems = [
       'Home',
       'Search',
-      'T & C',
       'Profile',
+      'T & C',
       'Settings',
     ];
     List<IconData> icons = [
       Icons.home_outlined,
       Icons.search_sharp,
-      Icons.event_note_outlined,
       Icons.person_outline_outlined,
+      Icons.event_note_outlined,
       Icons.settings,
     ];
     Widget buildMenuRow(int index) {
@@ -41,6 +46,7 @@ class _MenuScreenState extends State<MenuScreen> {
         onTap: () {
           setState(() {
             selectedMenuIndex = index;
+            widget.menuCallback(index);
           });
         },
         child: Padding(
@@ -89,7 +95,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   children: <Widget>[
                     Image(
                       image: AssetImage('assets/images/bsa_logo.png'),
-                      height: 80.0,
+                      height: 87.0,
                     ),
                   ],
                 ),
@@ -122,6 +128,13 @@ class _MenuScreenState extends State<MenuScreen> {
                         auth.signOut();
                         Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (context) => SignIn()));
+                        //remove below textStyle if error shows,
+                        //added this to make logout light up when pressed
+                        TextStyle(
+                          color: Colors.white.withOpacity(0.1),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w600,
+                        );
                       },
                     ),
                   ],

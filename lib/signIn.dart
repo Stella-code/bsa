@@ -194,7 +194,7 @@ class _SignInState extends State<SignIn> {
                       minWidth: 120,
                       onPressed: () {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => MenuFrame()));
+                            builder: (context) => MapScreen()));
                         //code to sign in with google
                       },
                       padding: EdgeInsets.all(20),

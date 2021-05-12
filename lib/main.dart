@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: Colors.blue,
         fontFamily: "Roboto",
       ),
       home: Container(
