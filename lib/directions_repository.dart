@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+// import 'package:geolocator/geolocator.dart';
+// import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '.env.dart';
-import 'directions_model.dart';
+import 'package:bsa/home.dart';
+import 'package:bsa/.env.dart';
+import 'package:bsa/directions_model.dart';
 
 class DirectionsRepository {
   static const String _baseUrl =
@@ -30,6 +32,8 @@ class DirectionsRepository {
     if (response.statusCode == 200) {
       return Directions.fromMap(response.data);
     }
-    return null;
+    // else {
+    //   return "Failed, No Response.";
+    // }
   }
 }

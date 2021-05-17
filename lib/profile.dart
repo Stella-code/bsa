@@ -41,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.blue,
+                        color: Colors.white70,
                         borderRadius: BorderRadius.circular(14.0),
                         boxShadow: const [
                           BoxShadow(
