@@ -331,69 +331,69 @@ class _MapScreenState extends State<MapScreen> {
           ),
 
           //below card is same like previous main card one
-          Positioned(
-            bottom: 0.0,
-            left: 0.0,
-            right: 0.0,
-            child: Container(
-              height: 300.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16.0),
-                  topRight: Radius.circular(16.0),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 16.0,
-                    spreadRadius: 0.5,
-                    offset: Offset(0.7, 0.7),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 17.0),
-                child: Column(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      color: Colors.tealAccent,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Row(
-                          children: [
-                            //below here an image is supposed to be replaced with icon
-                            Icon(
-                              Icons.speed,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: 16.0),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Car", style: TextStyle(fontSize: 18.0)),
-                                Text("10KM", style: TextStyle(fontSize: 16.0)),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20.0),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        children: [
-                          Icon(Icons.attach_money),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 0.0,
+          //   left: 0.0,
+          //   right: 0.0,
+          //   child: Container(
+          //     height: 300.0,
+          //     decoration: BoxDecoration(
+          //       color: Colors.white,
+          //       borderRadius: BorderRadius.only(
+          //         topLeft: Radius.circular(16.0),
+          //         topRight: Radius.circular(16.0),
+          //       ),
+          //       boxShadow: [
+          //         BoxShadow(
+          //           color: Colors.black,
+          //           blurRadius: 16.0,
+          //           spreadRadius: 0.5,
+          //           offset: Offset(0.7, 0.7),
+          //         ),
+          //       ],
+          //     ),
+          //     child: Padding(
+          //       padding: const EdgeInsets.symmetric(vertical: 17.0),
+          //       child: Column(
+          //         children: [
+          //           Container(
+          //             width: double.infinity,
+          //             color: Colors.tealAccent,
+          //             child: Padding(
+          //               padding: EdgeInsets.symmetric(horizontal: 16.0),
+          //               child: Row(
+          //                 children: [
+          //                   //below here an image is supposed to be replaced with icon
+          //                   Icon(
+          //                     Icons.speed,
+          //                     color: Colors.white,
+          //                   ),
+          //                   SizedBox(width: 16.0),
+          //                   Column(
+          //                     crossAxisAlignment: CrossAxisAlignment.start,
+          //                     children: [
+          //                       Text("Car", style: TextStyle(fontSize: 18.0)),
+          //                       Text("10KM", style: TextStyle(fontSize: 16.0)),
+          //                     ],
+          //                   ),
+          //                 ],
+          //               ),
+          //             ),
+          //           ),
+          //           SizedBox(height: 20.0),
+          //           Padding(
+          //             padding: EdgeInsets.symmetric(horizontal: 16.0),
+          //             child: Row(
+          //               children: [
+          //                 Icon(Icons.attach_money),
+          //               ],
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ),
+          // ),
 
           //to show distance and time to reach destination
           if (_info != null)
