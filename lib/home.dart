@@ -1,10 +1,12 @@
 import 'package:bsa/DataHandler/appData.dart';
+import 'package:bsa/components/progressDialog.dart';
 import 'package:bsa/directions_repository.dart';
 import 'package:bsa/menu_frame.dart';
 import 'package:bsa/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 // import 'package:bsa/menu_screen.dart';
 import 'package:geolocator/geolocator.dart';
 // import 'package:dio/dio.dart';
@@ -28,6 +30,11 @@ class _MapScreenState extends State<MapScreen> {
   Position currentPosition;
   var geoLocator = Geolocator();
   double bottomPaddingOfMap = 0;
+
+  // for setting labels on markers
+  Set<Marker> markersSet = {};
+  Set<Circle> circlesSet = {};
+
   //function for getting location
   void locatePosition() async {
     Position position = await Geolocator.getCurrentPosition(
@@ -55,6 +62,10 @@ class _MapScreenState extends State<MapScreen> {
 
   //below controller centers the map on your location
   GoogleMapController _googleMapController;
+
+  //below list stores the points data to draw polyline from currLoc to dest
+  List<LatLng> pLineCoordinates = [];
+  Set<Polyline> polylineSet = {};
 
   //2 markers for storing origin and destination
   Marker _origin;
@@ -124,6 +135,9 @@ class _MapScreenState extends State<MapScreen> {
             myLocationEnabled: true,
             zoomGesturesEnabled: true,
             initialCameraPosition: _initialCameraPosition,
+            polylines: polylineSet,
+            markers: markersSet,
+            circles: circlesSet,
             onMapCreated: (controller) {
               _googleMapController = controller;
 
@@ -133,24 +147,29 @@ class _MapScreenState extends State<MapScreen> {
               //below function animates cam to user loc
               locatePosition();
             },
-            //code for 2 markers to add on the screen
-            markers: {
-              if (_origin != null) _origin,
-              if (_destination != null) _destination
-            },
-            polylines: {
-              if (_info != null)
-                Polyline(
-                  polylineId: const PolylineId('overview_polyline'),
-                  color: Colors.blueAccent,
-                  width: 5,
-                  points: _info.polylinePoints
-                      .map((e) => LatLng(e.latitude, e.longitude))
-                      .toList(),
-                ),
-            },
             onLongPress: _addMarker,
+            //code for 2 markers to add on the screen
+            // markers: {
+            //   if (_origin != null) _origin,
+            //   if (_destination != null) _destination
+            // },
+            // polylines: {
+            //   if (_info != null)
+            //     Polyline(
+            //       polylineId: const PolylineId('overview_polyline'),
+            //       color: Colors.blueAccent,
+            //       width: 5,
+            //       points: _info.polylinePoints
+            //           .map((e) => LatLng(e.latitude, e.longitude))
+            //           .toList(),
+            //     ),
+            // },
+
+            //below line was a test hence commented
+            // polylineSet.add(addpolyline);
+            // onLongPress: _addMarker,
           ),
+
           //side menu button code below
           //check if not functioning properly after adding more screens like search and profile
           Positioned(
@@ -227,12 +246,16 @@ class _MapScreenState extends State<MapScreen> {
                     SizedBox(height: 10.0),
                     //below container search block
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        var res = await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => SearchPage()));
                         //goes to search page
+
+                        if (res == "obtainDirection") {
+                          await getPlaceDirection();
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -293,7 +316,7 @@ class _MapScreenState extends State<MapScreen> {
                                   ? Provider.of<AppData>(context)
                                       .currentLocation
                                       .placeName
-                                  : "location unavailable",
+                                  : "searching for location...",
                               style: TextStyle(
                                   color: Colors.black, fontSize: 10.0),
                             ),
@@ -306,6 +329,72 @@ class _MapScreenState extends State<MapScreen> {
               ),
             ),
           ),
+
+          //below card is same like previous main card one
+          Positioned(
+            bottom: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: Container(
+              height: 300.0,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black,
+                    blurRadius: 16.0,
+                    spreadRadius: 0.5,
+                    offset: Offset(0.7, 0.7),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 17.0),
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      color: Colors.tealAccent,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          children: [
+                            //below here an image is supposed to be replaced with icon
+                            Icon(
+                              Icons.speed,
+                              color: Colors.white,
+                            ),
+                            SizedBox(width: 16.0),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Car", style: TextStyle(fontSize: 18.0)),
+                                Text("10KM", style: TextStyle(fontSize: 16.0)),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20.0),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        children: [
+                          Icon(Icons.attach_money),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
           //to show distance and time to reach destination
           if (_info != null)
             Positioned(
@@ -388,5 +477,144 @@ class _MapScreenState extends State<MapScreen> {
           .getDirections(origin: _origin.position, destination: pos);
       setState(() => _info = directions);
     }
+  }
+
+  Future<void> getPlaceDirection() async {
+    var initialPos =
+        Provider.of<AppData>(context, listen: false).currentLocation;
+
+    var finalPos =
+        Provider.of<AppData>(context, listen: false).destinationLocation;
+
+    var currentLatLng = LatLng(initialPos.latitude, initialPos.longitude);
+    var destLatLng = LatLng(finalPos.latitude, finalPos.longitude);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => ProgressDialog(
+        message: "Setting up, please wait...",
+      ),
+    );
+
+    var details = await AssistantMethods.obtainPlaceDirectionDetails(
+        currentLatLng, destLatLng);
+
+    Navigator.pop(context);
+
+    print("this are the encoded points :: ");
+    print(details.encodedPoints);
+
+    //decoding polyline data starts below
+    PolylinePoints polylinePoints = PolylinePoints();
+    List<PointLatLng> decodedPolyLinePointsResult =
+        polylinePoints.decodePolyline(details.encodedPoints);
+
+    //clears previous data when adding new dest
+    pLineCoordinates.clear();
+
+    //what below line does is that it gives us a list of points to draw polyline on map
+    if (decodedPolyLinePointsResult.isNotEmpty) {
+      decodedPolyLinePointsResult.forEach((PointLatLng pointLatLng) {
+        pLineCoordinates
+            .add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
+      });
+    }
+
+    polylineSet.clear();
+
+    setState(() {
+      Polyline polyline = Polyline(
+        color: Colors.pink,
+        polylineId: PolylineId("PolylineID"),
+        jointType: JointType.round,
+        points: pLineCoordinates,
+        width: 5,
+        startCap: Cap.roundCap,
+        endCap: Cap.roundCap,
+        geodesic: true,
+      );
+
+      polylineSet.add(polyline);
+    });
+
+    setState(() {
+      if (_info != null) {
+        Polyline addpolyline = Polyline(
+          polylineId: const PolylineId('overview_polyline'),
+          color: Colors.blueAccent,
+          width: 5,
+          points: _info.polylinePoints
+              .map((e) => LatLng(e.latitude, e.longitude))
+              .toList(),
+        );
+        polylineSet.add(addpolyline);
+      }
+    });
+
+    LatLngBounds latLngBounds;
+    if (currentLatLng.latitude > destLatLng.latitude &&
+        currentLatLng.longitude > destLatLng.longitude) {
+      latLngBounds =
+          LatLngBounds(southwest: destLatLng, northeast: currentLatLng);
+    } else if (currentLatLng.longitude > destLatLng.longitude) {
+      latLngBounds = LatLngBounds(
+        southwest: LatLng(currentLatLng.latitude, destLatLng.longitude),
+        northeast: LatLng(destLatLng.latitude, currentLatLng.longitude),
+      );
+    } else if (currentLatLng.latitude > destLatLng.latitude) {
+      latLngBounds = LatLngBounds(
+        southwest: LatLng(destLatLng.latitude, currentLatLng.longitude),
+        northeast: LatLng(currentLatLng.latitude, destLatLng.longitude),
+      );
+    } else {
+      latLngBounds =
+          LatLngBounds(southwest: currentLatLng, northeast: destLatLng);
+    }
+    _googleMapController
+        .animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70.0));
+
+    Marker currLocMarker = Marker(
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+      infoWindow:
+          InfoWindow(title: initialPos.placeName, snippet: "you are here"),
+      position: currentLatLng,
+      markerId: MarkerId("yourLocationId"),
+    );
+
+    Marker destLocMarker = Marker(
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+      infoWindow: InfoWindow(
+          title: finalPos.placeName, snippet: "Destination Location"),
+      position: destLatLng,
+      markerId: MarkerId("destinationId"),
+    );
+
+    setState(() {
+      markersSet.add(currLocMarker);
+      markersSet.add(destLocMarker);
+    });
+
+    Circle currLocCircle = Circle(
+      fillColor: Colors.blueAccent,
+      center: currentLatLng,
+      radius: 12,
+      strokeWidth: 4,
+      strokeColor: Colors.blue,
+      circleId: CircleId("yourLocationId"),
+    );
+
+    Circle destCircle = Circle(
+      fillColor: Colors.deepOrange,
+      center: destLatLng,
+      radius: 12,
+      strokeWidth: 4,
+      strokeColor: Colors.deepOrangeAccent,
+      circleId: CircleId("destinationId"),
+    );
+
+    setState(() {
+      circlesSet.add(currLocCircle);
+      circlesSet.add(destCircle);
+    });
   }
 }

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class RequestAssistant {
   // var url = Uri.parse('https://example.com');
-  //add String before url in below line
+  //add String before url in below line error
   static Future<dynamic> getRequest(Uri url) async {
     http.Response response = await http.get(url);
 
