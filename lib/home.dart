@@ -1,4 +1,5 @@
 import 'package:bsa/DataHandler/appData.dart';
+import 'package:bsa/Models/directionDetails.dart';
 import 'package:bsa/components/progressDialog.dart';
 import 'package:bsa/directions_repository.dart';
 import 'package:bsa/menu_frame.dart';
@@ -25,15 +26,56 @@ class MapScreen extends StatefulWidget {
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   //getting lat/long of user current pos
   Position currentPosition;
   var geoLocator = Geolocator();
   double bottomPaddingOfMap = 0;
 
+  //to display distance between loc and dest
+  DirectionDetails tripDirectionDetails;
+
   // for setting labels on markers
   Set<Marker> markersSet = {};
   Set<Circle> circlesSet = {};
+
+  //in below line using below var to hide black spot details
+  double rideDetailsContainerHeight = 0;
+  double searchContainerHeight = 200.0;
+
+  //making a boolean value to make drawer icon into a cancel button to cancel ride
+  bool drawerOpen = true;
+
+  //below function is to cancel ride info
+  resetApp() {
+    setState(() {
+      drawerOpen = true;
+
+      searchContainerHeight = 220;
+      rideDetailsContainerHeight = 00.0;
+      bottomPaddingOfMap = 230;
+
+      //below resetting markers polylines coords circles
+      polylineSet.clear();
+      markersSet.clear();
+      circlesSet.clear();
+      pLineCoordinates.clear();
+    });
+
+    locatePosition();
+  }
+
+  //using below function to hide unwanted card in that instance
+  void displayRideDetailsContainer() async {
+    await getPlaceDirection();
+
+    setState(() {
+      searchContainerHeight = 0;
+      rideDetailsContainerHeight = 250.0;
+      bottomPaddingOfMap = 230;
+      drawerOpen = false;
+    });
+  }
 
   //function for getting location
   void locatePosition() async {
@@ -180,14 +222,19 @@ class _MapScreenState extends State<MapScreen> {
               height: 50.0,
               child: InkWell(
                 child: Icon(
-                  Icons.menu_rounded,
+                  //below lines decides when menu icon becomes cancel icon
+                  (drawerOpen) ? Icons.menu_rounded : Icons.cancel_outlined,
                   color: Colors.black87,
-                  size: 35,
+                  size: 40,
                 ),
                 onTap: () {
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => MenuFrame()));
-                  //goes to menu screen
+                  if (drawerOpen) {
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => MenuFrame()));
+                    //goes to menu screen
+                  } else {
+                    resetApp();
+                  }
                 },
               ),
               decoration: BoxDecoration(
@@ -208,192 +255,217 @@ class _MapScreenState extends State<MapScreen> {
             left: 0.0,
             right: 0.0,
             bottom: 0.0,
-            child: Container(
-              height: 200.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 16.0,
-                    spreadRadius: 0.5,
-                    offset: Offset(0.7, 0.7),
+            child: AnimatedSize(
+              vsync: this,
+              curve: Curves.bounceIn,
+              duration: Duration(milliseconds: 160),
+              child: Container(
+                height: searchContainerHeight,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    topRight: Radius.circular(30.0),
                   ),
-                ],
-              ),
-              //inside content code starts below
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 24.0, vertical: 18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 6.0),
-                    Text(
-                      "Hey there, ",
-                      style: TextStyle(fontSize: 12.0, color: Colors.grey),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 16.0,
+                      spreadRadius: 0.5,
+                      offset: Offset(0.7, 0.7),
                     ),
-                    Text(
-                      "Where to?",
-                      style: TextStyle(
-                          fontSize: 20.0, color: Colors.grey //add a font fam
-                          ),
-                    ),
-                    SizedBox(height: 10.0),
-                    //below container search block
-                    GestureDetector(
-                      onTap: () async {
-                        var res = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SearchPage()));
-                        //goes to search page
-
-                        if (res == "obtainDirection") {
-                          await getPlaceDirection();
-                        }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(60.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black54,
-                              blurRadius: 6.0,
-                              spreadRadius: 0.5,
-                              offset: Offset(0.7, 0.7),
+                  ],
+                ),
+                //inside content code starts below
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 18.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 6.0),
+                      Text(
+                        "Hey there, ",
+                        style: TextStyle(fontSize: 12.0, color: Colors.grey),
+                      ),
+                      Text(
+                        "Where to?",
+                        style: TextStyle(
+                            fontSize: 20.0, color: Colors.grey //add a font fam
                             ),
-                          ],
-                        ),
-                        //code for search bar starts below
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.search,
-                                color: Colors.blueAccent,
-                              ),
-                              SizedBox(
-                                width: 60.0,
-                              ),
-                              Text(
-                                "Search your destination",
-                                style: TextStyle(color: Colors.blueGrey),
+                      ),
+                      SizedBox(height: 10.0),
+                      //below container search block
+                      GestureDetector(
+                        onTap: () async {
+                          var res = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SearchPage()));
+                          //goes to search page
+
+                          if (res == "obtainDirection") {
+                            displayRideDetailsContainer();
+                            // await getPlaceDirection();
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(60.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black54,
+                                blurRadius: 6.0,
+                                spreadRadius: 0.5,
+                                offset: Offset(0.7, 0.7),
                               ),
                             ],
                           ),
+                          //code for search bar starts below
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.search,
+                                  color: Colors.blueAccent,
+                                ),
+                                SizedBox(
+                                  width: 60.0,
+                                ),
+                                Text(
+                                  "Search your destination",
+                                  style: TextStyle(color: Colors.blueGrey),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 15.0),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.location_on_outlined,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(height: 24.0),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            //in below text widget we display user current loc and if its not available add it
-                            Text(
-                              "Currently you are at : ",
-                              style: TextStyle(
-                                  color: Colors.black54, fontSize: 12.0),
-                            ),
-                            SizedBox(height: 10.0),
+                      SizedBox(height: 15.0),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on_outlined,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(height: 24.0),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              //in below text widget we display user current loc and if its not available add it
+                              Text(
+                                "Currently you are at : ",
+                                style: TextStyle(
+                                    color: Colors.black54, fontSize: 12.0),
+                              ),
+                              SizedBox(height: 10.0),
 
-                            Text(
-                              Provider.of<AppData>(context).currentLocation !=
-                                      null
-                                  ? Provider.of<AppData>(context)
-                                      .currentLocation
-                                      .placeName
-                                  : "searching for location...",
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: 10.0),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                              Text(
+                                Provider.of<AppData>(context).currentLocation !=
+                                        null
+                                    ? Provider.of<AppData>(context)
+                                        .currentLocation
+                                        .placeName
+                                    : "searching for location...",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 10.0),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
 
-          //below card is same like previous main card one
-          // Positioned(
-          //   bottom: 0.0,
-          //   left: 0.0,
-          //   right: 0.0,
-          //   child: Container(
-          //     height: 300.0,
-          //     decoration: BoxDecoration(
-          //       color: Colors.white,
-          //       borderRadius: BorderRadius.only(
-          //         topLeft: Radius.circular(16.0),
-          //         topRight: Radius.circular(16.0),
-          //       ),
-          //       boxShadow: [
-          //         BoxShadow(
-          //           color: Colors.black,
-          //           blurRadius: 16.0,
-          //           spreadRadius: 0.5,
-          //           offset: Offset(0.7, 0.7),
-          //         ),
-          //       ],
-          //     ),
-          //     child: Padding(
-          //       padding: const EdgeInsets.symmetric(vertical: 17.0),
-          //       child: Column(
-          //         children: [
-          //           Container(
-          //             width: double.infinity,
-          //             color: Colors.tealAccent,
-          //             child: Padding(
-          //               padding: EdgeInsets.symmetric(horizontal: 16.0),
-          //               child: Row(
-          //                 children: [
-          //                   //below here an image is supposed to be replaced with icon
-          //                   Icon(
-          //                     Icons.speed,
-          //                     color: Colors.white,
-          //                   ),
-          //                   SizedBox(width: 16.0),
-          //                   Column(
-          //                     crossAxisAlignment: CrossAxisAlignment.start,
-          //                     children: [
-          //                       Text("Car", style: TextStyle(fontSize: 18.0)),
-          //                       Text("10KM", style: TextStyle(fontSize: 16.0)),
-          //                     ],
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //           ),
-          //           SizedBox(height: 20.0),
-          //           Padding(
-          //             padding: EdgeInsets.symmetric(horizontal: 16.0),
-          //             child: Row(
-          //               children: [
-          //                 Icon(Icons.attach_money),
-          //               ],
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          //below card is used to display black spots in the path if there are any
+          Positioned(
+            bottom: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: AnimatedSize(
+              vsync: this,
+              curve: Curves.bounceIn,
+              duration: Duration(milliseconds: 160),
+              child: Container(
+                height: rideDetailsContainerHeight,
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 16.0,
+                      spreadRadius: 0.5,
+                      offset: Offset(0.7, 0.7),
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 17.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        color: Colors.tealAccent,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              //below here an image is supposed to be replaced with icon
+                              // SizedBox(width: 10.0),
+                              Text(
+                                "Black Spot Details:",
+                                style: TextStyle(
+                                    fontSize: 20.0, color: Colors.black),
+                              ),
+                              SizedBox(width: 60.0),
+                              Icon(
+                                Icons.map,
+                                color: Colors.black,
+                              ),
+                              SizedBox(width: 16.0),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Distance:",
+                                      style: TextStyle(
+                                          fontSize: 18.0, color: Colors.black)),
+                                  Text(
+                                      ((tripDirectionDetails != null)
+                                          ? tripDirectionDetails.distanceText
+                                          : ''),
+                                      style: TextStyle(
+                                          fontSize: 16.0, color: Colors.black)),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20.0),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.attach_money),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
 
           //to show distance and time to reach destination
           if (_info != null)
@@ -426,19 +498,19 @@ class _MapScreenState extends State<MapScreen> {
             ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.blue,
-        onPressed: () => _googleMapController.animateCamera(
-          _info != null
-              ? CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
-              : CameraUpdate.newCameraPosition(_initialCameraPosition),
-        ),
-        child: const Icon(
-          Icons.my_location,
-          color: Colors.black87,
-        ),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.white,
+      //   foregroundColor: Colors.blue,
+      //   onPressed: () => _googleMapController.animateCamera(
+      //     _info != null
+      //         ? CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
+      //         : CameraUpdate.newCameraPosition(_initialCameraPosition),
+      //   ),
+      //   child: const Icon(
+      //     Icons.my_location,
+      //     color: Colors.black87,
+      //   ),
+      // ),
     );
   }
 
@@ -498,6 +570,10 @@ class _MapScreenState extends State<MapScreen> {
 
     var details = await AssistantMethods.obtainPlaceDirectionDetails(
         currentLatLng, destLatLng);
+
+    setState(() {
+      tripDirectionDetails = details;
+    });
 
     Navigator.pop(context);
 

@@ -71,4 +71,9 @@ class AssistantMethods {
 
     return directionDetails;
   }
+
+  //use below function to display black spot details which come on the card after setting dest and getting polyline info
+  // static int calculateDetails(DirectionDetails directionDetails) {
+  //   double
+  // }
 }
