@@ -50,7 +50,7 @@ class _MenuScreenState extends State<MenuScreen> {
           });
         },
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 24.0),
+          padding: EdgeInsets.symmetric(vertical: 20.0),
           child: Row(
             children: <Widget>[
               Icon(
@@ -60,7 +60,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     : Colors.white.withOpacity(0.5),
               ),
               SizedBox(
-                width: 16.0,
+                width: 18.0,
               ),
               Text(
                 menuItems[index],
@@ -95,7 +95,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   children: <Widget>[
                     Image(
                       image: AssetImage('assets/images/bsa_logo.png'),
-                      height: 87.0,
+                      height: 40.0,
                     ),
                   ],
                 ),

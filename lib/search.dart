@@ -250,7 +250,7 @@ class _SearchPage extends State<SearchPage> {
     if (placeName.length > 1) {
       //below url is used to send request to places api to get info
       String autoCompleteUrl =
-          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$googleAPIKey&sessiontoken=1234567890&components=country:us";
+          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$googleAPIKey&sessiontoken=1234567890&components=country:in";
 
       var res = await RequestAssistant.getRequest(Uri.parse(autoCompleteUrl));
 
@@ -293,7 +293,10 @@ class PredictionTile extends StatelessWidget {
             SizedBox(width: 10.0),
             Row(
               children: [
-                Icon(Icons.add_location_sharp),
+                Icon(
+                  Icons.add_location_sharp,
+                  color: Colors.green,
+                ),
                 SizedBox(width: 14.0),
                 Expanded(
                   child: Column(
