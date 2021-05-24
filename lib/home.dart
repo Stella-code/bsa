@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:bsa/DataHandler/appData.dart';
 import 'package:bsa/Models/directionDetails.dart';
 import 'package:bsa/components/progressDialog.dart';
@@ -45,6 +46,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   //making a boolean value to make drawer icon into a cancel button to cancel ride
   bool drawerOpen = true;
+  bool detailsOpen = false;
 
   //below function is to cancel ride info
   resetApp() {
@@ -65,13 +67,31 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     locatePosition();
   }
 
+  void _detailsOpen() {
+    setState(() {
+      detailsOpen = false;
+      searchContainerHeight = 0;
+      rideDetailsContainerHeight = 260.0;
+      bottomPaddingOfMap = 230;
+    });
+  }
+
+  void _detailsClose() {
+    setState(() {
+      detailsOpen = true;
+      searchContainerHeight = 0;
+      rideDetailsContainerHeight = 160.0;
+      bottomPaddingOfMap = 230;
+    });
+  }
+
   //using below function to hide unwanted card in that instance
   void displayRideDetailsContainer() async {
     await getPlaceDirection();
 
     setState(() {
       searchContainerHeight = 0;
-      rideDetailsContainerHeight = 250.0;
+      rideDetailsContainerHeight = 160.0;
       bottomPaddingOfMap = 230;
       drawerOpen = false;
     });
@@ -395,7 +415,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
               child: Container(
                 height: rideDetailsContainerHeight,
                 decoration: BoxDecoration(
-                  color: Colors.blueGrey,
+                  color: Colors.white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20.0),
                     topRight: Radius.circular(20.0),
@@ -410,45 +430,145 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 17.0),
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: Column(
                     children: [
-                      Container(
-                        width: double.infinity,
-                        color: Colors.tealAccent,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Row(
-                            children: [
-                              //below here an image is supposed to be replaced with icon
-                              // SizedBox(width: 10.0),
-                              Text(
-                                "Black Spot Details:",
-                                style: TextStyle(
-                                    fontSize: 20.0, color: Colors.black),
-                              ),
-                              SizedBox(width: 60.0),
-                              Icon(
-                                Icons.map,
-                                color: Colors.black,
-                              ),
-                              SizedBox(width: 16.0),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Distance:",
-                                      style: TextStyle(
-                                          fontSize: 18.0, color: Colors.black)),
-                                  Text(
-                                      ((tripDirectionDetails != null)
-                                          ? tripDirectionDetails.distanceText
-                                          : ''),
-                                      style: TextStyle(
-                                          fontSize: 16.0, color: Colors.black)),
-                                ],
-                              ),
-                            ],
+                      Center(
+                        child: Container(
+                          width: 50.0,
+                          height: 5.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.tealAccent,
                           ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 5.0, vertical: 10.0),
+                        child: Row(
+                          children: [
+                            //below here an image is supposed to be replaced with icon
+                            // SizedBox(width: 10.0),
+                            Row(
+                              children: [
+                                Stack(
+                                  children: [
+                                    Container(
+                                      width: 180.0,
+                                      height: 50.0,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Colors.blueAccent,
+                                      ),
+                                      child: Center(
+                                        child: DefaultTextStyle(
+                                          style: const TextStyle(
+                                            fontSize: 20.0,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          child: AnimatedTextKit(
+                                            animatedTexts: [
+                                              WavyAnimatedText(
+                                                  'BlackSpotDetails'),
+                                              WavyAnimatedText(
+                                                  'BlackSpotDetails'),
+                                            ],
+                                            isRepeatingAnimation: true,
+                                            onTap: () {
+                                              if (detailsOpen) {
+                                                _detailsOpen();
+                                                //goes to menu screen
+                                              } else {
+                                                _detailsClose();
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: 5.0),
+                                InkWell(
+                                  onTap: () {
+                                    if (detailsOpen) {
+                                      _detailsOpen();
+                                      //goes to menu screen
+                                    } else {
+                                      _detailsClose();
+                                    }
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border:
+                                          Border.all(color: Colors.blueAccent),
+                                      color: Colors.white60,
+                                    ),
+                                    child: Center(
+                                      child: Icon(
+                                        //below lines decides when menu icon becomes cancel icon
+                                        (detailsOpen)
+                                            ? Icons.keyboard_arrow_up_outlined
+                                            : Icons
+                                                .keyboard_arrow_down_outlined,
+                                        color: Colors.black,
+                                        size: 40,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            SizedBox(width: 10.0),
+
+                            Container(
+                              width: 130,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.orange,
+                              ),
+                              child: Center(
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: 5.0),
+                                    Icon(
+                                      Icons.map_sharp,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 10.0),
+                                    Center(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(height: 4.0),
+                                          Text("Distance:",
+                                              style: TextStyle(
+                                                  fontSize: 18.0,
+                                                  color: Colors.black)),
+                                          Text(
+                                              ((tripDirectionDetails != null)
+                                                  ? tripDirectionDetails
+                                                      .distanceText
+                                                  : ''),
+                                              style: TextStyle(
+                                                  fontSize: 16.0,
+                                                  color: Colors.black)),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       SizedBox(height: 20.0),
@@ -456,7 +576,14 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                         padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: Row(
                           children: [
-                            Icon(Icons.attach_money),
+                            Icon(
+                              Icons.attach_money,
+                              color: Colors.black,
+                            ),
+                            Text(
+                              "BlackSpotDetails go here as listView",
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ],
                         ),
                       ),

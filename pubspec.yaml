@@ -30,6 +30,7 @@ dependencies:
   geolocator: ^7.0.3
   http: ^0.13.3
   provider: ^5.0.0
+  animated_text_kit: ^4.2.1
 
 
   # The following adds the Cupertino Icons font to your application.
