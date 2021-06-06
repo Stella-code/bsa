@@ -11,4 +11,6 @@
 // ),
 // ),
 
+//folder path for firebase storage gs://email-login-94234.appspot.com
 //
+//  gs://email-login-94234.appspot.com

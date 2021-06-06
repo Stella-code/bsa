@@ -1,6 +1,7 @@
 import 'package:bsa/home.dart';
 import 'package:bsa/profile.dart';
 import 'package:bsa/search.dart';
+import 'package:bsa/views/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'menu_screen.dart';
 
@@ -69,7 +70,7 @@ class _MenuFrameState extends State<MenuFrame>
       menuCallback: () {},
     ),
     //third should be profile screen
-    2: ProfilePage(
+    2: SearchPage(
       menuCallback: () {},
     ),
   };

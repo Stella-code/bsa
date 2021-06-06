@@ -18,7 +18,7 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   String _email;
   String _password;
-  final auth = FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -260,7 +260,8 @@ class _SignInState extends State<SignIn> {
 
   _signIn(String _email, String _password) async {
     try {
-      await auth.signInWithEmailAndPassword(email: _email, password: _password);
+      await _auth.signInWithEmailAndPassword(
+          email: _email, password: _password);
 
       //success
       Navigator.of(context).pushReplacement(

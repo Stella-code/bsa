@@ -34,6 +34,7 @@ class _SearchPage extends State<SearchPage> {
     locationTextEditingController.text = placeAddress;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: InkWell(
           onTap: Navigator.of(context).pop,
@@ -250,7 +251,7 @@ class _SearchPage extends State<SearchPage> {
     if (placeName.length > 1) {
       //below url is used to send request to places api to get info
       String autoCompleteUrl =
-          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$googleAPIKey&sessiontoken=1234567890&components=country:us";
+          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$googleAPIKey&sessiontoken=1234567890&components=country:in";
 
       var res = await RequestAssistant.getRequest(Uri.parse(autoCompleteUrl));
 
@@ -298,26 +299,24 @@ class PredictionTile extends StatelessWidget {
                   color: Colors.green,
                 ),
                 SizedBox(width: 14.0),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 8.0),
-                      Text(
-                        placePredictions.main_text,
-                        //below line of code handles places that have a long name
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 18.0, color: Colors.black),
-                      ),
-                      SizedBox(height: 3.0),
-                      Text(
-                        placePredictions.secondary_text,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 12.0, color: Colors.grey),
-                      ),
-                      SizedBox(height: 8.0),
-                    ],
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 8.0),
+                    Text(
+                      placePredictions.main_text,
+                      //below line of code handles places that have a long name
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 18.0, color: Colors.black),
+                    ),
+                    SizedBox(height: 3.0),
+                    Text(
+                      placePredictions.secondary_text,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 12.0, color: Colors.grey),
+                    ),
+                    SizedBox(height: 8.0),
+                  ],
                 ),
               ],
             ),

@@ -19,6 +19,8 @@ import 'Assistants/assistantMethods.dart';
 import 'directions_model.dart';
 
 class MapScreen extends StatefulWidget {
+  // static String route = "home";
+
   final auth = FirebaseAuth.instance;
   final Function menuCallback;
 

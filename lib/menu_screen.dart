@@ -1,5 +1,6 @@
 import 'package:bsa/profile.dart';
 import 'package:bsa/signIn.dart';
+import 'package:bsa/views/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -19,14 +20,13 @@ class _MenuScreenState extends State<MenuScreen> {
   int selectedMenuIndex = 0;
   @override
   Widget build(BuildContext context) {
-    // decoration:
-    // BoxDecoration(
-    //   gradient: LinearGradient(
-    //     begin: Alignment.topCenter,
-    //     end: Alignment.bottomCenter,
-    //     colors: [startingColor, mainColor],
-    //   ),
-    // );
+    BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [startingColor, mainColor],
+      ),
+    );
     List<String> menuItems = [
       'Home',
       'Search',
@@ -126,8 +126,8 @@ class _MenuScreenState extends State<MenuScreen> {
                       ),
                       onPressed: () {
                         auth.signOut();
-                        Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (context) => SignIn()));
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => LoginView()));
                         //remove below textStyle if error shows,
                         //added this to make logout light up when pressed
                         TextStyle(
