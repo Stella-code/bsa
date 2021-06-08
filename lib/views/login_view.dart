@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
+import 'Signup/signup_screen.dart';
+
 class LoginView extends StatefulWidget {
   static String route = "login";
 
@@ -25,10 +27,7 @@ class _LoginViewState extends State<LoginView> {
       resizeToAvoidBottomInset: false,
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage("https://source.unsplash.com/random"),
-            fit: BoxFit.cover,
-          ),
+          color: Colors.orange,
         ),
         child: Container(
           decoration: BoxDecoration(
@@ -58,6 +57,9 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     ),
                     padding: EdgeInsets.all(20.0),
+
+                    //LOGIN FORM STARTS BELOW
+
                     child: Form(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -108,9 +110,12 @@ class _LoginViewState extends State<LoginView> {
                               "Register",
                               style: textTheme.button,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => SignUpView()));
+                            },
                           ),
-                          ExternalSignInButtons()
+                          ExternalSignInButtons(),
                         ],
                       ),
                     ),

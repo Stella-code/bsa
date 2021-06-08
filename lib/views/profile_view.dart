@@ -9,6 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileView extends StatefulWidget {
+  final Function menuCallback;
+
+  ProfileView({@required this.menuCallback});
+
   static String route = "profile-view";
 
   @override
@@ -16,9 +20,11 @@ class ProfileView extends StatefulWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
+  var avatarUrl;
   UserModel _currentUser = locator.get<UserController>().currentUser;
   @override
   Widget build(BuildContext context) {
+    var picLink = _currentUser?.avatarUrl;
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -36,26 +42,28 @@ class _ProfileViewState extends State<ProfileView> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Avatar(
-                    avatarUrl: _currentUser?.avatarUrl,
-                    // avatarUrl: _currentUser?.avatarUrl != null
-                    //     ? _currentUser?.avatarUrl
-                    //     : CircleAvatar(
-                    //         radius: 50.0,
-                    //         child: Icon(Icons.photo_camera_sharp),
-                    //       ),
-                    onTap: () async {
-                      PickedFile selectedImage = await ImagePicker()
-                          .getImage(source: ImageSource.gallery);
-                      File image = File(selectedImage.path);
-                      print(image.path);
-
-                      await locator
-                          .get<UserController>()
-                          .uploadProfilePicture(image);
-
-                      setState(() {});
-                    },
-                  ),
+                      avatarUrl: picLink == null
+                          ? CircleAvatar(
+                              radius: 50.0,
+                              child: Icon(Icons.photo_camera),
+                            )
+                          : _currentUser?.avatarUrl,
+                      // avatarUrl: _currentUser?.avatarUrl != null
+                      //     ? _currentUser?.avatarUrl
+                      //     : CircleAvatar(
+                      //         radius: 50.0,
+                      //         child: Icon(Icons.photo_camera_sharp),
+                      //       ),
+                      onTap: () async {
+                        PickedFile selectedImage = await ImagePicker()
+                            .getImage(source: ImageSource.gallery);
+                        File image = File(selectedImage.path);
+                        print(image.path);
+                        await locator
+                            .get<UserController>()
+                            .uploadProfilePicture(image);
+                        setState(() {});
+                      }),
                   Text(
                       "Hi ${_currentUser.displayName ?? 'nice to see you here.'}"),
                 ],

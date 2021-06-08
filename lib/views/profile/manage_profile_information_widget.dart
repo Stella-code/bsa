@@ -3,6 +3,8 @@ import 'package:bsa/models/user_model.dart';
 import 'package:bsa/view_controller/user_controller.dart';
 import 'package:flutter/material.dart';
 
+import '../../home.dart';
+
 class ManageProfileInformationWidget extends StatefulWidget {
   final UserModel currentUser;
 
@@ -113,7 +115,8 @@ class _ManageProfileInformationWidgetState
                   userController
                       .updateUserPassword(_newPasswordController.text);
                   //below navigate to map screen later
-                  Navigator.pop(context);
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => MapScreen()));
                 }
               },
               child: Text("Save Profile"),

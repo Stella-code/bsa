@@ -12,14 +12,13 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 // import 'package:bsa/menu_screen.dart';
 import 'package:geolocator/geolocator.dart';
 // import 'package:dio/dio.dart';
-// import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'Assistants/assistantMethods.dart';
 import 'directions_model.dart';
 
 class MapScreen extends StatefulWidget {
-  // static String route = "home";
+  static String route = "home";
 
   final auth = FirebaseAuth.instance;
   final Function menuCallback;
@@ -118,7 +117,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     print("this is your Address :: " + address);
   }
 
-  //fixing a location on the map (san fran)
+  //fixing a location on the map (fatorda)
   static const _initialCameraPosition = CameraPosition(
     target: LatLng(37.773972, -122.431297),
     zoom: 12.0,

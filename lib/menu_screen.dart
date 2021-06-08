@@ -1,11 +1,6 @@
-import 'package:bsa/profile.dart';
-import 'package:bsa/signIn.dart';
-import 'package:bsa/views/login_view.dart';
+import 'package:bsa/views/Login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-Color mainColor = Color.fromRGBO(48, 96, 96, 1.0);
-Color startingColor = Color.fromRGBO(70, 112, 112, 1.0);
 
 class MenuScreen extends StatefulWidget {
   final Function(int) menuCallback;
@@ -17,6 +12,8 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
+  Color mainColor = Color.fromRGBO(48, 96, 96, 1.0);
+  Color startingColor = Color.fromRGBO(70, 112, 112, 1.0);
   int selectedMenuIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -81,6 +78,13 @@ class _MenuScreenState extends State<MenuScreen> {
     final auth = FirebaseAuth.instance;
     return Material(
       child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [startingColor, mainColor],
+          ),
+        ),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -111,12 +115,24 @@ class _MenuScreenState extends State<MenuScreen> {
 
                 Row(
                   children: <Widget>[
-                    Icon(
-                      Icons.logout,
-                      color: Colors.white.withOpacity(0.5),
-                    ),
-                    FlatButton(
-                      child: Text(
+                    TextButton.icon(
+                      onPressed: () {
+                        auth.signOut();
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => LoginScreenView()));
+                        setState(() {
+                          TextStyle(
+                            color: Colors.white.withOpacity(0.1),
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                          );
+                        });
+                      },
+                      icon: Icon(
+                        Icons.logout,
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+                      label: Text(
                         'Logout',
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.5),
@@ -124,18 +140,6 @@ class _MenuScreenState extends State<MenuScreen> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      onPressed: () {
-                        auth.signOut();
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => LoginView()));
-                        //remove below textStyle if error shows,
-                        //added this to make logout light up when pressed
-                        TextStyle(
-                          color: Colors.white.withOpacity(0.1),
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w600,
-                        );
-                      },
                     ),
                   ],
                 ),

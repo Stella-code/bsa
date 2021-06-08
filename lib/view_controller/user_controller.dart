@@ -46,6 +46,14 @@ class UserController {
     _currentUser.avatarUrl = await getDownloadUrl();
   }
 
+  Future<void> signUpWithEmailAndPassword(
+      {String email, String password}) async {
+    _currentUser = await _authRepo.signUpWithEmailAndPassword(
+        email: email, password: password);
+
+    // _currentUser.avatarUrl = await getDownloadUrl();
+  }
+
   void updateDisplayName(String displayName) {
     _currentUser.displayName = displayName;
     _authRepo.updateDisplayName(displayName);

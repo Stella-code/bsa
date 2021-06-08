@@ -31,6 +31,14 @@ class AuthRepo {
         displayName: authResult.user.displayName);
   }
 
+  Future<UserModel> signUpWithEmailAndPassword(
+      {String email, String password}) async {
+    var authResult = await _auth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    return UserModel(authResult.user.uid,
+        displayName: authResult.user.displayName);
+  }
+
   Future<UserModel> getUser() async {
     var firebaseUser = _auth.currentUser;
     return UserModel(firebaseUser?.uid, displayName: firebaseUser?.displayName);

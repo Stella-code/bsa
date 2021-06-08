@@ -12,7 +12,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  String _email, _password, _username;
+  String _email, _password;
   final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
