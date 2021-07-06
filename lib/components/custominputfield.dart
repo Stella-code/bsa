@@ -28,6 +28,7 @@ class CustomInputField extends StatelessWidget {
           TextField(
             style: TextStyle(
               color: Colors.white,
+              fontFamily: "HelveticaNow",
             ),
             obscureText: obscure,
             decoration: InputDecoration(
@@ -40,6 +41,7 @@ class CustomInputField extends StatelessWidget {
                 hintStyle: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w400,
+                  fontFamily: "HelveticaNow",
                 ),
                 fillColor: Colors.blue,
                 focusedBorder: OutlineInputBorder(

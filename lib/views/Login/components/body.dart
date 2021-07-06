@@ -40,10 +40,13 @@ class _BodyState extends State<Body> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // SizedBox(height: size.height * 0.05),
+            SizedBox(height: size.height * 0.05),
             Text(
               "LOGIN",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 28.0,
+              ),
             ),
             SizedBox(height: size.height * 0.03),
             SvgPicture.asset(
@@ -129,7 +132,8 @@ class _BodyState extends State<Body> {
                   },
                   child: Text(
                     "SIGN IN",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                        fontFamily: "HelveticaNow", color: Colors.white),
                   ),
                 ),
               ),
@@ -151,14 +155,10 @@ class _BodyState extends State<Body> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                // SocalIcon(
-                //   iconSrc: "assets/icons/facebook.svg",
-                //   press: () {},
-                // ),
-                // SocalIcon(
-                //   iconSrc: "assets/icons/twitter.svg",
-                //   press: () {},
-                // ),
+                SocialIcon(
+                  iconSrc: "assets/icons/facebook.svg",
+                  press: () {},
+                ),
                 SocialIcon(
                   iconSrc: "assets/icons/google-plus.svg",
                   press: () {
@@ -167,6 +167,10 @@ class _BodyState extends State<Body> {
                     Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) => MapScreen()));
                   },
+                ),
+                SocialIcon(
+                  iconSrc: "assets/icons/twitter.svg",
+                  press: () {},
                 ),
               ],
             ),

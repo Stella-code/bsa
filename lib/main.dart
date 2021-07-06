@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+// import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import 'constants.dart';
@@ -31,19 +32,16 @@ class MyApp extends StatelessWidget {
           primaryColor: kPrimaryColor,
           scaffoldBackgroundColor: Colors.white,
         ),
-        home: Container(
-          child: AnimatedSplashScreen(
-            splash: Image.asset(
-              'assets/images/splashlogo.png',
-              fit: BoxFit.fitHeight,
-              // width: 400.0,
-              // height: 1000.0,
-            ),
-            nextScreen: LoginScreenView(),
-            splashTransition: SplashTransition.fadeTransition,
-            backgroundColor: Colors.blueAccent,
-            duration: 3000,
+        home: AnimatedSplashScreen(
+          splash: Image.asset(
+            "assets/images/bsaSplashLogo.png",
+            width: 250,
+            height: 250,
           ),
+          nextScreen: LoginScreenView(),
+          splashTransition: SplashTransition.fadeTransition,
+          backgroundColor: Colors.blueGrey,
+          duration: 3000,
         ),
         routes: {
           MapScreen.route: (context) => MapScreen(),

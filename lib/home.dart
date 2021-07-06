@@ -1,8 +1,10 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:slimy_card/slimy_card.dart';
 import 'package:bsa/DataHandler/appData.dart';
 import 'package:bsa/Models/directionDetails.dart';
 import 'package:bsa/components/progressDialog.dart';
-import 'package:bsa/directions_repository.dart';
+import 'package:bsa/repository/directions_repository.dart';
 import 'package:bsa/menu_frame.dart';
 import 'package:bsa/search.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +17,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'Assistants/assistantMethods.dart';
-import 'directions_model.dart';
+import 'Models/directions_model.dart';
 
 class MapScreen extends StatefulWidget {
   static String route = "home";
@@ -43,7 +45,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
   //in below line using below var to hide black spot details
   double rideDetailsContainerHeight = 0;
-  double searchContainerHeight = 200.0;
+  double searchContainerHeight = 180.0;
 
   //making a boolean value to make drawer icon into a cancel button to cancel ride
   bool drawerOpen = true;
@@ -54,7 +56,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     setState(() {
       drawerOpen = true;
 
-      searchContainerHeight = 220;
+      searchContainerHeight = 180;
       rideDetailsContainerHeight = 00.0;
       bottomPaddingOfMap = 230;
 
@@ -147,9 +149,44 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
+        elevation: 1.0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        leading: IconButton(
+          onPressed: () {
+            if (drawerOpen) {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => MenuFrame()));
+              //goes to menu screen
+            } else {
+              resetApp();
+            }
+          },
+          icon: (drawerOpen)
+              ? Icon(
+                  Icons.menu_rounded,
+                  color: Colors.green,
+                  size: 30.0,
+                )
+              : Icon(
+                  Icons.cancel_outlined,
+                  color: Colors.red,
+                  size: 30.0,
+                ),
+        ),
         centerTitle: false,
-        title: const Text('Black Spot Alert'),
+        title: InkWell(
+          onTap: () {
+            resetApp();
+          },
+          child: const Text(
+            'B.S.A',
+            style: TextStyle(
+                color: Colors.green,
+                fontFamily: "HelveticaNow",
+                fontWeight: FontWeight.bold,
+                fontSize: 24.0),
+          ),
+        ),
         actions: [
           if (_origin != null)
             TextButton(
@@ -164,7 +201,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
               ),
               style: TextButton.styleFrom(
                 primary: Colors.green,
-                textStyle: const TextStyle(fontWeight: FontWeight.w600),
+                textStyle: const TextStyle(
+                    fontFamily: "DevantHorgen", fontWeight: FontWeight.w600),
               ),
               child: const Text('ORIGIN'),
             ),
@@ -210,7 +248,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
               //below function animates cam to user loc
               locatePosition();
             },
-            onLongPress: _addMarker,
+            // onLongPress: _addMarker,
             //code for 2 markers to add on the screen
             // markers: {
             //   if (_origin != null) _origin,
@@ -235,42 +273,42 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
           //side menu button code below
           //check if not functioning properly after adding more screens like search and profile
-          Positioned(
-            top: 12.0,
-            left: 12.0,
-            child: Container(
-              width: 50.0,
-              height: 50.0,
-              child: InkWell(
-                child: Icon(
-                  //below lines decides when menu icon becomes cancel icon
-                  (drawerOpen) ? Icons.menu_rounded : Icons.cancel_outlined,
-                  color: Colors.black87,
-                  size: 40,
-                ),
-                onTap: () {
-                  if (drawerOpen) {
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => MenuFrame()));
-                    //goes to menu screen
-                  } else {
-                    resetApp();
-                  }
-                },
-              ),
-              decoration: BoxDecoration(
-                color: Colors.white70,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 2),
-                    blurRadius: 6.0,
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: 12.0,
+          //   left: 12.0,
+          //   child: Container(
+          //     width: 50.0,
+          //     height: 50.0,
+          //     child: InkWell(
+          //       child: Icon(
+          //         //below lines decides when menu icon becomes cancel icon
+          //         (drawerOpen) ? Icons.menu_rounded : Icons.cancel_outlined,
+          //         color: Colors.black87,
+          //         size: 40,
+          //       ),
+          //       onTap: () {
+          //         if (drawerOpen) {
+          //           Navigator.of(context).pushReplacement(
+          //               MaterialPageRoute(builder: (context) => MenuFrame()));
+          //           //goes to menu screen
+          //         } else {
+          //           resetApp();
+          //         }
+          //       },
+          //     ),
+          //     decoration: BoxDecoration(
+          //       color: Colors.white70,
+          //       borderRadius: BorderRadius.circular(10.0),
+          //       boxShadow: const [
+          //         BoxShadow(
+          //           color: Colors.black26,
+          //           offset: Offset(0, 2),
+          //           blurRadius: 6.0,
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           //code for bottom card starts below
           Positioned(
             left: 0.0,
@@ -279,7 +317,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             child: AnimatedSize(
               vsync: this,
               curve: Curves.bounceIn,
-              duration: Duration(milliseconds: 160),
+              duration: Duration(milliseconds: 300),
               child: Container(
                 height: searchContainerHeight,
                 decoration: BoxDecoration(
@@ -300,104 +338,126 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 //inside content code starts below
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0, vertical: 18.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 6.0),
-                      Text(
-                        "Hey there, ",
-                        style: TextStyle(fontSize: 12.0, color: Colors.grey),
-                      ),
-                      Text(
-                        "Where to?",
-                        style: TextStyle(
-                            fontSize: 20.0, color: Colors.grey //add a font fam
-                            ),
-                      ),
-                      SizedBox(height: 10.0),
-                      //below container search block
-                      GestureDetector(
-                        onTap: () async {
-                          var res = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SearchPage()));
-                          //goes to search page
+                      horizontal: 16.0, vertical: 10.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 8.0, width: 8.0),
+                        Text(
+                          "Hey there, ",
+                          style: TextStyle(
+                              fontFamily: "HelveticaNow",
+                              fontSize: 12.0,
+                              color: Colors.grey),
+                        ),
+                        Text(
+                          "Where to?",
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.grey,
+                              fontFamily: "HelveticaNow"),
+                        ),
+                        SizedBox(height: 10.0),
+                        //below container search block
+                        Center(
+                          child: GestureDetector(
+                            onTap: () async {
+                              var res = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SearchPage()));
+                              //goes to search page
 
-                          if (res == "obtainDirection") {
-                            displayRideDetailsContainer();
-                            // await getPlaceDirection();
-                          }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(60.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black54,
-                                blurRadius: 6.0,
-                                spreadRadius: 0.5,
-                                offset: Offset(0.7, 0.7),
+                              if (res == "obtainDirection") {
+                                displayRideDetailsContainer();
+                                // await getPlaceDirection();
+                              }
+                            },
+                            child: Container(
+                              width: 300.0,
+                              height: 50.0,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(40.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black54,
+                                    blurRadius: 6.0,
+                                    spreadRadius: 0.5,
+                                    offset: Offset(0.7, 0.7),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          //code for search bar starts below
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.search,
-                                  color: Colors.blueAccent,
+                              //code for search bar starts below
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.search,
+                                      color: Colors.blueAccent,
+                                    ),
+                                    SizedBox(
+                                      width: 55.0,
+                                    ),
+                                    Text(
+                                      "Search your destination",
+                                      style: TextStyle(
+                                          color: Colors.blueGrey,
+                                          fontFamily: "HelveticaNow"),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(
-                                  width: 60.0,
-                                ),
-                                Text(
-                                  "Search your destination",
-                                  style: TextStyle(color: Colors.blueGrey),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 15.0),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_on_outlined,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(height: 24.0),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        SizedBox(height: 16.0),
+                        SafeArea(
+                          child: Row(
                             children: [
-                              //in below text widget we display user current loc and if its not available add it
-                              Text(
-                                "Currently you are at : ",
-                                style: TextStyle(
-                                    color: Colors.black54, fontSize: 12.0),
+                              Icon(
+                                Icons.my_location,
+                                color: Colors.grey,
                               ),
-                              SizedBox(height: 10.0),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 16.0),
+                                    //in below text widget we display user current loc and if its not available add it
+                                    Text(
+                                      "Currently you are at : ",
+                                      style: TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 16.0,
+                                          fontFamily: "HelveticaNow"),
+                                    ),
+                                    SizedBox(height: 10.0),
 
-                              Text(
-                                Provider.of<AppData>(context).currentLocation !=
-                                        null
-                                    ? Provider.of<AppData>(context)
-                                        .currentLocation
-                                        .placeName
-                                    : "searching for location...",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 10.0),
+                                    Text(
+                                      Provider.of<AppData>(context)
+                                                  .currentLocation !=
+                                              null
+                                          ? Provider.of<AppData>(context)
+                                              .currentLocation
+                                              .placeName
+                                          : "searching for location...",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14.0,
+                                          fontFamily: "HelveticaNow"),
+                                    ),
+                                    SizedBox(height: 10.0),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -411,12 +471,12 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             right: 0.0,
             child: AnimatedSize(
               vsync: this,
-              curve: Curves.bounceIn,
-              duration: Duration(milliseconds: 160),
+              curve: Curves.easeInOut,
+              duration: Duration(milliseconds: 300),
               child: Container(
                 height: rideDetailsContainerHeight,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color.fromRGBO(71, 231, 237, 1.0),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20.0),
                     topRight: Radius.circular(20.0),
@@ -432,163 +492,167 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Container(
-                          width: 50.0,
-                          height: 5.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: Colors.tealAccent,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Container(
+                            width: 50.0,
+                            height: 5.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.tealAccent,
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 5.0, vertical: 10.0),
-                        child: Row(
-                          children: [
-                            //below here an image is supposed to be replaced with icon
-                            // SizedBox(width: 10.0),
-                            Row(
-                              children: [
-                                Stack(
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 5.0, vertical: 10.0),
+                          child: Row(
+                            children: [
+                              //black spot details button
+                              Container(
+                                height: 52.0,
+                                width: 192.0,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: Color(0xfffa4a0c),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Container(
-                                      width: 180.0,
-                                      height: 50.0,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: Colors.blueAccent,
+                                    SizedBox(height: 15, width: 14),
+                                    Text(
+                                      "BlackSpot Details",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        color: Color(0xfff6f6f9),
+                                        fontSize: 18,
                                       ),
-                                      child: Center(
-                                        child: DefaultTextStyle(
-                                          style: const TextStyle(
-                                            fontSize: 20.0,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          child: AnimatedTextKit(
-                                            animatedTexts: [
-                                              WavyAnimatedText(
-                                                  'BlackSpotDetails'),
-                                              WavyAnimatedText(
-                                                  'BlackSpotDetails'),
-                                            ],
-                                            isRepeatingAnimation: true,
-                                            onTap: () {
-                                              if (detailsOpen) {
-                                                _detailsOpen();
-                                                //goes to menu screen
-                                              } else {
-                                                _detailsClose();
-                                              }
-                                            },
-                                          ),
+                                    ),
+                                    SizedBox(height: 15.0, width: 8),
+                                    InkWell(
+                                      onTap: () {
+                                        if (detailsOpen) {
+                                          _detailsOpen();
+                                          //goes to menu screen
+                                        } else {
+                                          _detailsClose();
+                                        }
+                                      },
+                                      child: Container(
+                                        width: 43,
+                                        height: 43,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Color(0x3f000000),
+                                              blurRadius: 10,
+                                              offset: Offset(-4, 4),
+                                            ),
+                                          ],
+                                          color: Color(0xffeb3f03),
+                                        ),
+                                        child: Center(
+                                          child: (detailsOpen)
+                                              ? Icon(
+                                                  Icons
+                                                      .keyboard_arrow_up_rounded,
+                                                  color: Colors.white,
+                                                  size: 30)
+                                              : Icon(
+                                                  Icons
+                                                      .keyboard_arrow_down_rounded,
+                                                  color: Colors.white,
+                                                  size: 30),
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                SizedBox(width: 5.0),
-                                InkWell(
-                                  onTap: () {
-                                    if (detailsOpen) {
-                                      _detailsOpen();
-                                      //goes to menu screen
-                                    } else {
-                                      _detailsClose();
-                                    }
-                                  },
-                                  child: Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border:
-                                          Border.all(color: Colors.blueAccent),
-                                      color: Colors.white60,
-                                    ),
-                                    child: Center(
-                                      child: Icon(
-                                        //below lines decides when menu icon becomes cancel icon
-                                        (detailsOpen)
-                                            ? Icons.keyboard_arrow_up_outlined
-                                            : Icons
-                                                .keyboard_arrow_down_outlined,
-                                        color: Colors.black,
-                                        size: 40,
+                              ),
+
+                              SizedBox(width: 10.0),
+
+                              Container(
+                                width: 130,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.orange,
+                                ),
+                                child: Center(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 5.0),
+                                      Icon(
+                                        Icons.map_sharp,
+                                        color: Colors.white,
                                       ),
-                                    ),
+                                      SizedBox(width: 10.0),
+                                      Center(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(height: 4.0),
+                                            Text("Distance:",
+                                                style: TextStyle(
+                                                    fontSize: 18.0,
+                                                    color: Colors.black)),
+                                            Text(
+                                                ((tripDirectionDetails != null)
+                                                    ? tripDirectionDetails
+                                                        .distanceText
+                                                    : ''),
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    color: Colors.black)),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 15.0),
+                          child: SafeArea(
+                            child: Column(
+                              children: [
+                                SlimyCard(
+                                  color: Colors.blue,
+                                  borderRadius: 15,
+                                  width: 330,
+                                  topCardHeight: 150,
+                                  bottomCardHeight: 150,
+                                  topCardWidget: topCardWidget(),
+                                  bottomCardWidget: bottomCardWidget(),
+                                  slimeEnabled: true,
+                                ),
+                                SizedBox(height: 15.0),
+                                SlimyCard(
+                                  color: Colors.deepPurple,
+                                  borderRadius: 15,
+                                  width: 330,
+                                  topCardHeight: 150,
+                                  bottomCardHeight: 150,
+                                  topCardWidget: topCardWidget1(),
+                                  bottomCardWidget: bottomCardWidget1(),
+                                  slimeEnabled: true,
                                 ),
                               ],
                             ),
-
-                            SizedBox(width: 10.0),
-
-                            Container(
-                              width: 130,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Colors.orange,
-                              ),
-                              child: Center(
-                                child: Row(
-                                  children: [
-                                    SizedBox(width: 5.0),
-                                    Icon(
-                                      Icons.map_sharp,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(width: 10.0),
-                                    Center(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(height: 4.0),
-                                          Text("Distance:",
-                                              style: TextStyle(
-                                                  fontSize: 18.0,
-                                                  color: Colors.black)),
-                                          Text(
-                                              ((tripDirectionDetails != null)
-                                                  ? tripDirectionDetails
-                                                      .distanceText
-                                                  : ''),
-                                              style: TextStyle(
-                                                  fontSize: 16.0,
-                                                  color: Colors.black)),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 20.0),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.attach_money,
-                              color: Colors.black,
-                            ),
-                            Text(
-                              "BlackSpotDetails go here as listView",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -596,34 +660,34 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           ),
 
           //to show distance and time to reach destination
-          if (_info != null)
-            Positioned(
-              top: 20.0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 6.0,
-                  horizontal: 12.0,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.blueAccent,
-                  borderRadius: BorderRadius.circular(20.0),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black26,
-                      offset: Offset(0, 2),
-                      blurRadius: 6.0,
-                    )
-                  ],
-                ),
-                child: Text(
-                  '${_info.totalDistance}, ${_info.totalDuration}',
-                  style: const TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
+          // if (_info != null)
+          //   Positioned(
+          //     top: 20.0,
+          //     child: Container(
+          //       padding: const EdgeInsets.symmetric(
+          //         vertical: 6.0,
+          //         horizontal: 12.0,
+          //       ),
+          //       decoration: BoxDecoration(
+          //         color: Colors.blueAccent,
+          //         borderRadius: BorderRadius.circular(20.0),
+          //         boxShadow: const [
+          //           BoxShadow(
+          //             color: Colors.black26,
+          //             offset: Offset(0, 2),
+          //             blurRadius: 6.0,
+          //           )
+          //         ],
+          //       ),
+          //       child: Text(
+          //         '${_info.totalDistance}, ${_info.totalDuration}',
+          //         style: const TextStyle(
+          //           fontSize: 18.0,
+          //           fontWeight: FontWeight.w600,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
       // floatingActionButton: FloatingActionButton(
@@ -642,42 +706,42 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     );
   }
 
-  void _addMarker(LatLng pos) async {
-    if (_origin == null || (_origin != null && _destination != null)) {
-      // Origin is not set OR Origin/Destination are both set
-      // Set origin
-      setState(() {
-        _origin = Marker(
-          markerId: const MarkerId('origin'),
-          infoWindow: const InfoWindow(title: 'Origin'),
-          icon:
-              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-          position: pos,
-        );
-        // Reset destination
-        _destination = null;
-
-        // Reset info
-        _info = null;
-      });
-    } else {
-      // Origin is already set
-      // Set destination
-      setState(() {
-        _destination = Marker(
-          markerId: const MarkerId('destination'),
-          infoWindow: const InfoWindow(title: 'Destination'),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          position: pos,
-        );
-      });
-
-      // Get directions
-      final directions = await DirectionsRepository()
-          .getDirections(origin: _origin.position, destination: pos);
-      setState(() => _info = directions);
-    }
-  }
+  // void _addMarker(LatLng pos) async {
+  //   if (_origin == null || (_origin != null && _destination != null)) {
+  //     // Origin is not set OR Origin/Destination are both set
+  //     // Set origin
+  //     setState(() {
+  //       _origin = Marker(
+  //         markerId: const MarkerId('origin'),
+  //         infoWindow: const InfoWindow(title: 'Origin'),
+  //         icon:
+  //             BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+  //         position: pos,
+  //       );
+  //       // Reset destination
+  //       _destination = null;
+  //
+  //       // Reset info
+  //       _info = null;
+  //     });
+  //   } else {
+  //     // Origin is already set
+  //     // Set destination
+  //     setState(() {
+  //       _destination = Marker(
+  //         markerId: const MarkerId('destination'),
+  //         infoWindow: const InfoWindow(title: 'Destination'),
+  //         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+  //         position: pos,
+  //       );
+  //     });
+  //
+  //     // Get directions
+  //     final directions = await DirectionsRepository()
+  //         .getDirections(origin: _origin.position, destination: pos);
+  //     setState(() => _info = directions);
+  //   }
+  // }
 
   Future<void> getPlaceDirection() async {
     var initialPos =
@@ -821,4 +885,189 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
       circlesSet.add(destCircle);
     });
   }
+}
+
+//define top and bottom cards below
+//first card
+Widget topCardWidget() {
+  return Column(
+    children: [
+      Row(
+        children: <Widget>[
+          SizedBox(width: 20.0, height: 20.0),
+          Container(
+            height: 40,
+            width: 40,
+            child: SvgPicture.asset(
+              "assets/icons/BSsign.svg",
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(6),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 20.0),
+          Text(
+            'TYPE: ',
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontFamily: "HelveticaNow"),
+          ),
+          SizedBox(width: 5),
+          Text(
+            'Tri-Section',
+            style: TextStyle(
+              color: Colors.white.withOpacity(1.0),
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              fontFamily: "HelveticaNow",
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+      Expanded(
+        child: Row(
+          children: <Widget>[
+            SizedBox(width: 28.0, height: 50.0),
+            Center(
+              child: Icon(
+                Icons.location_searching_sharp,
+                color: Colors.white70,
+              ),
+            ),
+            SizedBox(width: 30.0),
+            Text(
+              'Holy Spirit Church, Borda',
+              style: TextStyle(
+                color: Colors.white.withOpacity(1.0),
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                fontFamily: "HelveticaNow",
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
+Widget bottomCardWidget() {
+  return Row(
+    children: [
+      SizedBox(height: 15),
+      Expanded(
+        child: Text(
+          '1.5 KM',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 32,
+            fontWeight: FontWeight.w500,
+            fontFamily: "HelveticaNow",
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ],
+  );
+}
+
+//2nd card
+Widget topCardWidget1() {
+  return Column(
+    children: [
+      Row(
+        children: <Widget>[
+          SizedBox(width: 20.0, height: 20.0),
+          Container(
+            height: 40,
+            width: 40,
+            child: SvgPicture.asset(
+              "assets/icons/BSsign.svg",
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(6),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 20.0),
+          Text(
+            'TYPE: ',
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontFamily: "HelveticaNow"),
+          ),
+          SizedBox(width: 5),
+          Text(
+            'Sharp-Turn',
+            style: TextStyle(
+              color: Colors.white.withOpacity(1.0),
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              fontFamily: "HelveticaNow",
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+      Expanded(
+        child: Row(
+          children: <Widget>[
+            SizedBox(width: 28.0, height: 50.0),
+            Center(
+              child: Icon(
+                Icons.location_searching_sharp,
+                color: Colors.white70,
+              ),
+            ),
+            SizedBox(width: 30.0),
+            Text(
+              'Sao joaquim road, Sonsodo',
+              style: TextStyle(
+                color: Colors.white.withOpacity(1.0),
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                fontFamily: "HelveticaNow",
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
+Widget bottomCardWidget1() {
+  return Row(
+    children: [
+      SizedBox(height: 15),
+      Expanded(
+        child: Text(
+          '2.8 KM',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 32,
+            fontWeight: FontWeight.w500,
+            fontFamily: "HelveticaNow",
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ],
+  );
 }

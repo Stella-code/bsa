@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:bsa/home.dart';
 import 'package:bsa/.env.dart';
-import 'package:bsa/directions_model.dart';
+import 'package:bsa/Models/directions_model.dart';
 
 class DirectionsRepository {
   static const String _baseUrl =

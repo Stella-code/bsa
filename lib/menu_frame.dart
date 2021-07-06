@@ -1,5 +1,7 @@
 import 'package:bsa/home.dart';
 import 'package:bsa/search.dart';
+import 'package:bsa/settings.dart';
+import 'package:bsa/terms.dart';
 import 'package:bsa/views/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'menu_screen.dart';
@@ -15,7 +17,7 @@ class _MenuFrameState extends State<MenuFrame>
   AnimationController _animationController;
   Animation<double> scaleAnimation, smallerScaleAnimation;
   //time taken for the screen to travel
-  Duration duration = Duration(milliseconds: 200);
+  Duration duration = Duration(milliseconds: 300);
   bool menuOpen = true; //change to false if error shows
   List<Animation> scaleAnimations;
 
@@ -28,13 +30,15 @@ class _MenuFrameState extends State<MenuFrame>
         Tween<double>(begin: 1.0, end: 0.7).animate(_animationController);
     //initialized smaller scale animation
     smallerScaleAnimation =
-        Tween<double>(begin: 1.0, end: 0.6).animate(_animationController);
+        Tween<double>(begin: 0.5, end: 0.6).animate(_animationController);
 
     //defined the list scaleAnimations which has 3 screens showing
     scaleAnimations = [
       Tween<double>(begin: 1.0, end: 0.7).animate(_animationController),
       Tween<double>(begin: 1.0, end: 0.6).animate(_animationController),
       Tween<double>(begin: 1.0, end: 0.5).animate(_animationController),
+      Tween<double>(begin: 1.0, end: 0.4).animate(_animationController),
+      Tween<double>(begin: 1.0, end: 0.3).animate(_animationController),
     ];
     _animationController.forward();
     screenSnapshot = screens.values.toList();
@@ -42,24 +46,6 @@ class _MenuFrameState extends State<MenuFrame>
 
   //map of screens that can be navigated to in the menu drawer
   Map<int, Widget> screens = {
-    // 0: Container(
-    //   decoration: BoxDecoration(
-    //     color: Colors.deepOrange,
-    //     borderRadius: BorderRadius.circular(40.0),
-    //   ),
-    // ),
-    // 1: Container(
-    //   decoration: BoxDecoration(
-    //     color: Colors.white,
-    //     borderRadius: BorderRadius.circular(40.0),
-    //   ),
-    // ),
-    // 3: Container(
-    //   decoration: BoxDecoration(
-    //     color: Colors.blueAccent,
-    //     borderRadius: BorderRadius.circular(40.0),
-    //   ),
-    // ),
     //first should be MapScreen
     0: MapScreen(
       menuCallback: () {},
@@ -70,6 +56,12 @@ class _MenuFrameState extends State<MenuFrame>
     ),
     //third should be profile screen
     2: ProfileView(
+      menuCallback: () {},
+    ),
+    3: Terms(
+      menuCallback: () {},
+    ),
+    4: SettingsPage(
       menuCallback: () {},
     ),
   };
@@ -108,8 +100,8 @@ class _MenuFrameState extends State<MenuFrame>
       duration: duration,
       top: 0,
       bottom: 0,
-      left: menuOpen ? deviceWidth * 0.55 - (position * 50) : 0.0,
-      right: menuOpen ? deviceWidth * -0.45 + (position * 50) : 0.0,
+      left: menuOpen ? deviceWidth * 0.55 - (position * 40) : 0.0,
+      right: menuOpen ? deviceWidth * -0.45 + (position * 40) : 0.0,
       child: ScaleTransition(
         scale: scaleAnimations[position],
         child: GestureDetector(

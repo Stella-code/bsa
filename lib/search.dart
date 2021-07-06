@@ -10,6 +10,9 @@ import 'Models/placePredictions.dart';
 import 'components/Divider.dart';
 import 'package:bsa/components/progressDialog.dart';
 
+import 'components/text_field_container.dart';
+import 'constants.dart';
+
 class SearchPage extends StatefulWidget {
   final Function menuCallback;
 
@@ -36,16 +39,24 @@ class _SearchPage extends State<SearchPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        leading: InkWell(
-          onTap: Navigator.of(context).pop,
-          child: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
+        elevation: 1.0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => MenuFrame()));
+          },
+          icon: Icon(
+            Icons.menu_rounded,
+            color: Colors.green,
+            size: 35.0,
           ),
         ),
-        backgroundColor: Colors.deepPurple,
         centerTitle: true,
-        title: const Text('Search Destination'),
+        title: const Text(
+          'Search Destination',
+          style: TextStyle(color: Colors.green, fontFamily: "DevantHorgen"),
+        ),
       ),
       body: Column(
         children: [
@@ -55,79 +66,53 @@ class _SearchPage extends State<SearchPage> {
               BoxShadow(
                 color: Colors.black,
                 blurRadius: 6.0,
-                spreadRadius: 0.5,
+                spreadRadius: 0.2,
                 offset: Offset(0.7, 0.7),
               ),
             ]),
             child: Padding(
               padding: EdgeInsets.only(
-                  left: 25.0, top: 25.0, right: 25.0, bottom: 20.0),
+                  left: 25.0, top: 10.0, right: 25.0, bottom: 10.0),
               child: Column(
                 children: [
-                  SizedBox(height: 5.0),
-
-                  // SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Positioned(
-                        top: 12.0,
-                        left: 12.0,
-                        child: Container(
-                          width: 50.0,
-                          height: 50.0,
-                          child: InkWell(
-                            child: Icon(
-                              Icons.menu_rounded,
-                              color: Colors.black87,
-                              size: 35,
-                            ),
-                            onTap: () {
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => MenuFrame()));
-                              //goes to menu screen
-                            },
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white70,
-                            borderRadius: BorderRadius.circular(10.0),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black26,
-                                offset: Offset(0, 2),
-                                blurRadius: 6.0,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16.0),
+                  SizedBox(height: 10.0),
                   //search block code below
                   Row(
                     children: [
                       Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[400],
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(3.0),
+                        child: Padding(
+                          padding: EdgeInsets.all(3.0),
+                          child: TextFieldContainer(
                             child: TextField(
+                              //add code to change field color on input
+                              onChanged: (value) {},
+                              cursorColor: kPrimaryColor,
+                              keyboardType: TextInputType.text,
                               controller: locationTextEditingController,
                               decoration: InputDecoration(
+                                labelText: "Your Location",
+                                icon: Icon(
+                                  Icons.my_location,
+                                  color: kPrimaryColor,
+                                ),
                                 hintText: "current location",
-                                fillColor: Colors.grey[400],
-                                filled: true,
                                 border: InputBorder.none,
-                                isDense: true,
-                                contentPadding: EdgeInsets.only(
-                                    left: 11.0, top: 8.0, bottom: 8.0),
                               ),
                             ),
                           ),
+
+                          // TextField(
+                          //   controller: locationTextEditingController,
+                          //   decoration: InputDecoration(
+                          //     hintText: "current location",
+                          //     fillColor: Colors.grey[400],
+                          //     filled: true,
+                          //     border: InputBorder.none,
+                          //     isDense: true,
+                          //     contentPadding: EdgeInsets.only(
+                          //         left: 11.0, top: 8.0, bottom: 8.0),
+                          //   ),
+                          // ),
                         ),
                       )
                     ],
@@ -137,26 +122,24 @@ class _SearchPage extends State<SearchPage> {
                   Row(
                     children: [
                       Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[400],
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(3.0),
+                        child: Padding(
+                          padding: EdgeInsets.all(3.0),
+                          child: TextFieldContainer(
                             child: TextField(
                               onChanged: (val) {
                                 findPlace(val);
                               },
+                              cursorColor: kPrimaryColor,
+                              keyboardType: TextInputType.text,
                               controller: destinationTextEditingController,
                               decoration: InputDecoration(
-                                hintText: "Where to?",
-                                fillColor: Colors.grey[400],
-                                filled: true,
+                                labelText: "Destination",
+                                icon: Icon(
+                                  Icons.edit_location_rounded,
+                                  color: kPrimaryColor,
+                                ),
+                                hintText: "Enter Destination",
                                 border: InputBorder.none,
-                                isDense: true,
-                                contentPadding: EdgeInsets.only(
-                                    left: 11.0, top: 8.0, bottom: 8.0),
                               ),
                             ),
                           ),
@@ -190,59 +173,6 @@ class _SearchPage extends State<SearchPage> {
               : Container(),
         ],
       ),
-
-      // Column(
-      //   children: <Widget>[
-      //     Expanded(
-      //       child: Container(
-      //         child: Positioned(
-      //           top: 12.0,
-      //           left: 12.0,
-      //           child: Row(
-      //             children: <Widget>[
-      //               Container(
-      //                 width: 50.0,
-      //                 height: 50.0,
-      //                 child: Positioned(
-      //                   child: InkWell(
-      //                     child: Icon(
-      //                       Icons.menu_sharp,
-      //                       color: Colors.black87,
-      //                       size: 31.0,
-      //                     ),
-      //                     onTap: () {
-      //                       Navigator.of(context).pushReplacement(
-      //                           MaterialPageRoute(
-      //                               builder: (context) => MenuFrame()));
-      //                       //goes to menu screen
-      //                     },
-      //                   ),
-      //                 ),
-      //                 decoration: BoxDecoration(
-      //                   color: Colors.white70,
-      //                   borderRadius: BorderRadius.circular(14.0),
-      //                   boxShadow: const [
-      //                     BoxShadow(
-      //                       color: Colors.black26,
-      //                       offset: Offset(0, 2),
-      //                       blurRadius: 6.0,
-      //                     ),
-      //                   ],
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-      //         width: double.infinity,
-      //         decoration: BoxDecoration(
-      //           color: Colors.blueAccent,
-      //           border:
-      //               Border.all(style: BorderStyle.solid, color: Colors.grey),
-      //         ),
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 
@@ -307,13 +237,19 @@ class PredictionTile extends StatelessWidget {
                       placePredictions.main_text,
                       //below line of code handles places that have a long name
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 18.0, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.black,
+                          fontFamily: "DevantHorgen"),
                     ),
                     SizedBox(height: 3.0),
                     Text(
                       placePredictions.secondary_text,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 12.0, color: Colors.grey),
+                      style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.grey,
+                          fontFamily: "HelveticaNow"),
                     ),
                     SizedBox(height: 8.0),
                   ],

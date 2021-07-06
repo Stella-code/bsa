@@ -12,6 +12,7 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
+  // the orange shade bg:- (250, 74, 12, 1.0) and (193, 51, 1, 0.9)
   Color mainColor = Color.fromRGBO(48, 96, 96, 1.0);
   Color startingColor = Color.fromRGBO(70, 112, 112, 1.0);
   int selectedMenuIndex = 0;
@@ -32,10 +33,10 @@ class _MenuScreenState extends State<MenuScreen> {
       'Settings',
     ];
     List<IconData> icons = [
-      Icons.home_outlined,
+      Icons.house,
       Icons.search_sharp,
-      Icons.person_outline_outlined,
-      Icons.event_note_outlined,
+      Icons.account_circle_outlined,
+      Icons.local_offer_sharp,
       Icons.settings,
     ];
     Widget buildMenuRow(int index) {
@@ -98,8 +99,8 @@ class _MenuScreenState extends State<MenuScreen> {
                 Row(
                   children: <Widget>[
                     Image(
-                      image: AssetImage('assets/images/bsa_logo.png'),
-                      height: 40.0,
+                      image: AssetImage('assets/images/bsaSplashLogo.png'),
+                      height: 60.0,
                     ),
                   ],
                 ),

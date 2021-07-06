@@ -4,7 +4,7 @@ import 'package:bsa/home.dart';
 import 'package:bsa/locator.dart';
 import 'package:bsa/view_controller/user_controller.dart';
 import 'package:bsa/views/Login/login_screen.dart';
-import 'package:bsa/views/home_view.dart';
+// import 'package:bsa/views/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bsa/views/Signup/components/background.dart';
@@ -34,7 +34,10 @@ class _BodyState extends State<Body> {
             SizedBox(height: size.height * 0.05),
             Text(
               "SIGNUP",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.0),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 28.0,
+              ),
             ),
             SizedBox(height: size.height * 0.03),
             SvgPicture.asset(
@@ -43,6 +46,7 @@ class _BodyState extends State<Body> {
             ),
             TextFieldContainer(
               child: TextField(
+                //add code to change field color on input
                 onChanged: (value) {},
                 cursorColor: kPrimaryColor,
                 keyboardType: TextInputType.emailAddress,
@@ -96,6 +100,9 @@ class _BodyState extends State<Body> {
                   onPressed: () async {
                     //code for onPressed action
                     try {
+                      CircularProgressIndicator(
+                        backgroundColor: Colors.green,
+                      );
                       await locator
                           .get<UserController>()
                           .signUpWithEmailAndPassword(
@@ -112,7 +119,8 @@ class _BodyState extends State<Body> {
                   },
                   child: Text(
                     "SIGNUP",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                        color: Colors.white, fontFamily: "HelveticaNow"),
                   ),
                 ),
               ),
