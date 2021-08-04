@@ -576,6 +576,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
                               SizedBox(width: 10.0),
 
+                              //dist button
                               Container(
                                 width: 130,
                                 height: 50,
@@ -632,8 +633,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                   width: 330,
                                   topCardHeight: 150,
                                   bottomCardHeight: 150,
-                                  topCardWidget: topCardWidget(),
-                                  bottomCardWidget: bottomCardWidget(),
+                                  topCardWidget: topCardWidget1(),
+                                  bottomCardWidget: bottomCardWidget1(),
                                   slimeEnabled: true,
                                 ),
                                 SizedBox(height: 15.0),
@@ -643,8 +644,8 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                                   width: 330,
                                   topCardHeight: 150,
                                   bottomCardHeight: 150,
-                                  topCardWidget: topCardWidget1(),
-                                  bottomCardWidget: bottomCardWidget1(),
+                                  topCardWidget: topCardWidget(),
+                                  bottomCardWidget: bottomCardWidget(),
                                   slimeEnabled: true,
                                 ),
                               ],
@@ -888,7 +889,100 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 }
 
 //define top and bottom cards below
-//first card
+
+//First card
+Widget topCardWidget1() {
+  return Column(
+    children: [
+      Row(
+        children: <Widget>[
+          SizedBox(width: 20.0, height: 20.0),
+          Container(
+            height: 40,
+            width: 40,
+            child: SvgPicture.asset(
+              "assets/icons/BSsign.svg",
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(6),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 20.0),
+          Text(
+            'TYPE: ',
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontFamily: "HelveticaNow"),
+          ),
+          SizedBox(width: 5),
+          Text(
+            'Round-about',
+            style: TextStyle(
+              color: Colors.white.withOpacity(1.0),
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              fontFamily: "HelveticaNow",
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+      Expanded(
+        child: Row(
+          children: <Widget>[
+            SizedBox(width: 28.0, height: 50.0),
+            Center(
+              child: Icon(
+                Icons.location_searching_sharp,
+                color: Colors.white70,
+              ),
+            ),
+            SizedBox(width: 30.0),
+            Text(
+              'Ravindra bhavan, Fatorda.',
+              style: TextStyle(
+                color: Colors.white.withOpacity(1.0),
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                fontFamily: "HelveticaNow",
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
+Widget bottomCardWidget1() {
+  return Row(
+    children: [
+      SizedBox(height: 15),
+      Expanded(
+        child: Text(
+          '1.1 KM',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 32,
+            fontWeight: FontWeight.w500,
+            fontFamily: "HelveticaNow",
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    ],
+  );
+}
+
+//second card
 Widget topCardWidget() {
   return Column(
     children: [
@@ -944,7 +1038,7 @@ Widget topCardWidget() {
             ),
             SizedBox(width: 30.0),
             Text(
-              'Holy Spirit Church, Borda',
+              'Holy Spirit Church, Borda.',
               style: TextStyle(
                 color: Colors.white.withOpacity(1.0),
                 fontSize: 18,
@@ -967,98 +1061,6 @@ Widget bottomCardWidget() {
       Expanded(
         child: Text(
           '1.5 KM',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 32,
-            fontWeight: FontWeight.w500,
-            fontFamily: "HelveticaNow",
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    ],
-  );
-}
-
-//2nd card
-Widget topCardWidget1() {
-  return Column(
-    children: [
-      Row(
-        children: <Widget>[
-          SizedBox(width: 20.0, height: 20.0),
-          Container(
-            height: 40,
-            width: 40,
-            child: SvgPicture.asset(
-              "assets/icons/BSsign.svg",
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(6),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 20,
-                  spreadRadius: 1,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(width: 20.0),
-          Text(
-            'TYPE: ',
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontFamily: "HelveticaNow"),
-          ),
-          SizedBox(width: 5),
-          Text(
-            'Sharp-Turn',
-            style: TextStyle(
-              color: Colors.white.withOpacity(1.0),
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              fontFamily: "HelveticaNow",
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-      Expanded(
-        child: Row(
-          children: <Widget>[
-            SizedBox(width: 28.0, height: 50.0),
-            Center(
-              child: Icon(
-                Icons.location_searching_sharp,
-                color: Colors.white70,
-              ),
-            ),
-            SizedBox(width: 30.0),
-            Text(
-              'Sao joaquim road, Sonsodo',
-              style: TextStyle(
-                color: Colors.white.withOpacity(1.0),
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                fontFamily: "HelveticaNow",
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    ],
-  );
-}
-
-Widget bottomCardWidget1() {
-  return Row(
-    children: [
-      SizedBox(height: 15),
-      Expanded(
-        child: Text(
-          '2.8 KM',
           style: TextStyle(
             color: Colors.white,
             fontSize: 32,

@@ -219,45 +219,47 @@ class PredictionTile extends StatelessWidget {
         getPlaceAddressDetails(placePredictions.place_id, context);
       },
       child: Container(
-        child: Column(
-          children: [
-            SizedBox(width: 10.0),
-            Row(
-              children: [
-                Icon(
-                  Icons.add_location_sharp,
-                  color: Colors.green,
-                ),
-                SizedBox(width: 14.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 8.0),
-                    Text(
-                      placePredictions.main_text,
-                      //below line of code handles places that have a long name
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.black,
-                          fontFamily: "DevantHorgen"),
-                    ),
-                    SizedBox(height: 3.0),
-                    Text(
-                      placePredictions.secondary_text,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          color: Colors.grey,
-                          fontFamily: "HelveticaNow"),
-                    ),
-                    SizedBox(height: 8.0),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(width: 10.0),
-          ],
+        child: Expanded(
+          child: Column(
+            children: [
+              SizedBox(width: 10.0),
+              Row(
+                children: [
+                  Icon(
+                    Icons.add_location_sharp,
+                    color: Colors.green,
+                  ),
+                  SizedBox(width: 14.0),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 8.0),
+                      Text(
+                        placePredictions.main_text,
+                        //below line of code handles places that have a long name
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.black,
+                            fontFamily: "DevantHorgen"),
+                      ),
+                      SizedBox(height: 3.0),
+                      Text(
+                        placePredictions.secondary_text,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.grey,
+                            fontFamily: "HelveticaNow"),
+                      ),
+                      SizedBox(height: 8.0),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(width: 10.0),
+            ],
+          ),
         ),
       ),
     );
